@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 import { signOut } from "./actions";
 
 const navItems = [
@@ -138,6 +139,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
+      <Toaster />
     </div>
   );
 }
