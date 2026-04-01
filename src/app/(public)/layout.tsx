@@ -311,11 +311,12 @@ export default async function PublicLayout({
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Main Content */}
-        {children}
+      {/* Main Content */}
+      {children}
 
-        {/* Pre-Footer */}
+      {/* Pre-Footer */}
         <div className="row dark footer-row full-width padding-top-30">
           <div className="row padding-bottom-33">
             <div className="column column-1-3">
@@ -457,7 +458,6 @@ export default async function PublicLayout({
             </span>
           </div>
         </div>
-      </div>
 
       <a
         href="#top"
