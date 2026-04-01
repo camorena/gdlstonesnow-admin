@@ -142,19 +142,19 @@ export interface Database {
         Row: {
           id: string;
           service_id: string;
-          text: string;
+          title: string;
           sort_order: number;
         };
         Insert: {
           id?: string;
           service_id: string;
-          text: string;
+          title: string;
           sort_order?: number;
         };
         Update: {
           id?: string;
           service_id?: string;
-          text?: string;
+          title?: string;
           sort_order?: number;
         };
       };
@@ -241,19 +241,19 @@ export interface Database {
         Row: {
           id: string;
           promotion_id: string;
-          text: string;
+          title: string;
           sort_order: number;
         };
         Insert: {
           id?: string;
           promotion_id: string;
-          text: string;
+          title: string;
           sort_order?: number;
         };
         Update: {
           id?: string;
           promotion_id?: string;
-          text?: string;
+          title?: string;
           sort_order?: number;
         };
       };
