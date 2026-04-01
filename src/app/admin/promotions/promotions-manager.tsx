@@ -139,7 +139,7 @@ export function PromotionsManager({
           .insert(
             items.map((item, index) => ({
               promotion_id: promotionId,
-              text: item.text,
+              title: item.title,
               sort_order: index,
             }))
           );
@@ -239,12 +239,12 @@ export function PromotionsManager({
     }));
   }
 
-  function updateItem(promotionId: string, itemIndex: number, text: string) {
+  function updateItem(promotionId: string, itemIndex: number, title: string) {
     setEditingData((prev) => {
       const editing = prev[promotionId];
       if (!editing) return prev;
       const items = [...editing.items];
-      items[itemIndex] = { ...items[itemIndex], text };
+      items[itemIndex] = { ...items[itemIndex], title };
       return { ...prev, [promotionId]: { ...editing, items } };
     });
   }
@@ -269,7 +269,7 @@ export function PromotionsManager({
       const newItem: PromotionItem = {
         id: `temp-${Date.now()}`,
         promotion_id: promotionId,
-        text: "",
+        title: "",
         sort_order: maxOrder + 1,
       };
       return {
@@ -584,7 +584,7 @@ export function PromotionsManager({
                               </button>
                             </div>
                             <Input
-                              value={item.text}
+                              value={item.title}
                               onChange={(e) =>
                                 updateItem(
                                   promotion.id,

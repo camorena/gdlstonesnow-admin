@@ -125,7 +125,7 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
           .insert(
             items.map((item, index) => ({
               service_id: serviceId,
-              text: item.text,
+              title: item.title,
               sort_order: index,
             }))
           );
@@ -243,7 +243,7 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
       const newItem: ServiceItem = {
         id: `temp-${Date.now()}`,
         service_id: serviceId,
-        text: "",
+        title: "",
         sort_order: maxOrder + 1,
       };
       return {
@@ -471,7 +471,7 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
                               </button>
                             </div>
                             <Input
-                              value={item.text}
+                              value={item.title}
                               onChange={(e) =>
                                 updateItem(service.id, index, e.target.value)
                               }
