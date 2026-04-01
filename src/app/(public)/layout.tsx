@@ -15,28 +15,27 @@ export default async function PublicLayout({
     .select("*")
     .single();
 
-  const s = settings ?? {
-    address: "1000 W. 94th St. Bloomington MN 55420",
-    address_short: "1000 W.94th St. Bloomington",
-    address_state_zip: "MN 55420",
-    office_phone: "(952) 882 6182",
-    office_phone_raw: "9528826182",
-    sales_phone: "(612) 236 6190",
-    sales_phone_raw: "6122366190",
-    hours: "Always Open",
-    facebook_url: "https://m.facebook.com/GDLStoneSnow/?_rdr",
-    instagram_url: "https://instagram.com/gdlstonesnowllc",
-    youtube_url:
-      "https://www.youtube.com/channel/UC4ingZfTXS1jpl1vKMjNVJw/videos",
-    site_name: "GDL Stone Snow",
-    logo_alt:
-      "GDL Stone Snow LLC - Landscaping and Snow Removal Bloomington MN",
-    meta_title:
-      "Landscaping & Snow Removal Bloomington MN | GDL Stone Snow",
-    meta_description:
-      "GDL Stone Snow LLC offers expert landscaping, masonry, lawn care & snow removal in Bloomington MN & the Twin Cities metro. Serving since 2003. Free estimates!",
-    meta_keywords:
-      "landscaping Bloomington MN, snow removal Minneapolis, masonry contractor, lawn care Twin Cities, stone work Minnesota, ice control management",
+  // Map DB fields to template fields
+  const raw = settings ?? {};
+  const s = {
+    address: raw.address_street ? `${raw.address_street} ${raw.address_city} ${raw.address_state} ${raw.address_zip}` : "1000 W. 94th St. Bloomington MN 55420",
+    address_short: raw.address_street ? `${raw.address_street} ${raw.address_city}` : "1000 W.94th St. Bloomington",
+    address_state_zip: raw.address_state ? `${raw.address_state} ${raw.address_zip}` : "MN 55420",
+    office_phone: raw.phone_office || "(952) 882 6182",
+    office_phone_raw: (raw.phone_office || "9528826182").replace(/\D/g, ""),
+    sales_phone: raw.phone_sales || "(612) 236 6190",
+    sales_phone_raw: (raw.phone_sales || "6122366190").replace(/\D/g, ""),
+    hours: raw.hours_display || "Always Open",
+    facebook_url: raw.facebook_url || "https://m.facebook.com/GDLStoneSnow/?_rdr",
+    instagram_url: raw.instagram_url || "https://instagram.com/gdlstonesnowllc",
+    youtube_url: raw.youtube_url || "https://www.youtube.com/channel/UC4ingZfTXS1jpl1vKMjNVJw/videos",
+    site_name: raw.business_name || "GDL Stone Snow",
+    email: raw.email || "camoren000@gmail.com",
+    google_maps_embed: raw.google_maps_embed || "",
+    logo_alt: "GDL Stone Snow LLC - Landscaping and Snow Removal Bloomington MN",
+    meta_title: "Landscaping & Snow Removal Bloomington MN | GDL Stone Snow",
+    meta_description: raw.meta_description || "GDL Stone Snow LLC offers expert landscaping, masonry, lawn care & snow removal in Bloomington MN & the Twin Cities metro. Serving since 2003. Free estimates!",
+    meta_keywords: "landscaping Bloomington MN, snow removal Minneapolis, masonry contractor, lawn care Twin Cities, stone work Minnesota, ice control management",
   };
 
   return (
