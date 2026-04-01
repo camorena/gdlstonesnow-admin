@@ -79,7 +79,8 @@ export default async function PromotionsPage() {
                 <br />
                 <br />
                 <div style={{ textAlign: "left" }}>
-                  {promo.promotion_items.map((item: Record<string, string>) => (
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {promo.promotion_items.map((item: any) => (
                     <p key={item.id} className="template-tag">
                       {item.title || item.text}
                     </p>
