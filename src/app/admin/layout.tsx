@@ -1,3 +1,4 @@
+import "@/app/globals.css";
 import { AdminShell } from "./admin-shell";
 
 export default function AdminLayout({
