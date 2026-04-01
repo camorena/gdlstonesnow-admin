@@ -79,9 +79,9 @@ export default async function PromotionsPage() {
                 <br />
                 <br />
                 <div style={{ textAlign: "left" }}>
-                  {promo.promotion_items.map((item) => (
+                  {promo.promotion_items.map((item: Record<string, string>) => (
                     <p key={item.id} className="template-tag">
-                      {item.text}
+                      {item.title || item.text}
                     </p>
                   ))}
                 </div>
