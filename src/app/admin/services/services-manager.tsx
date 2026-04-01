@@ -216,12 +216,12 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
     }));
   }
 
-  function updateItem(serviceId: string, itemIndex: number, text: string) {
+  function updateItem(serviceId: string, itemIndex: number, title: string) {
     setEditingData((prev) => {
       const editing = prev[serviceId];
       if (!editing) return prev;
       const items = [...editing.items];
-      items[itemIndex] = { ...items[itemIndex], text };
+      items[itemIndex] = { ...items[itemIndex], title };
       return { ...prev, [serviceId]: { ...editing, items } };
     });
   }
