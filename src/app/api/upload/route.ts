@@ -42,9 +42,11 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ url: blob.url });
-  } catch {
+  } catch (err) {
+    console.error("Upload error:", err);
+    const message = err instanceof Error ? err.message : "Upload failed. Please try again.";
     return NextResponse.json(
-      { error: "Upload failed. Please try again." },
+      { error: message },
       { status: 500 }
     );
   }
