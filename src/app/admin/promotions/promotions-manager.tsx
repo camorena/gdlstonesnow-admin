@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/card";
 import type { Promotion, PromotionItem } from "@/types/database";
 
-const SEASONS = ["spring", "summer", "fall"] as const;
+const SEASONS = ["spring", "summer", "fall", "winter"] as const;
 
 interface Props {
   initialPromotions: Promotion[];
