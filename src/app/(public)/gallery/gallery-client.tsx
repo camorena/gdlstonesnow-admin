@@ -57,7 +57,7 @@ export default function GalleryClient({ items }: GalleryClientProps) {
             className={`rounded-full px-7 py-2.5 text-sm font-semibold transition-all duration-300 ${
               activeFilter === tab.value
                 ? "bg-[#8BB63A] text-white shadow-lg shadow-[#8BB63A]/25"
-                : "border-2 border-gray-200 bg-white text-gray-600 hover:border-[#8BB63A]/50 hover:text-[#8BB63A]"
+                : "border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:border-[#8BB63A]/50 hover:text-[#8BB63A]"
             }`}
           >
             {tab.label}
@@ -143,7 +143,7 @@ export default function GalleryClient({ items }: GalleryClientProps) {
 
       {filtered.length === 0 && (
         <div className="mt-20 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
             <svg
               className="h-8 w-8 text-gray-400"
               fill="none"
@@ -158,7 +158,7 @@ export default function GalleryClient({ items }: GalleryClientProps) {
               />
             </svg>
           </div>
-          <p className="text-lg text-gray-500">
+          <p className="text-lg text-gray-500 dark:text-gray-400">
             No items found in this category.
           </p>
         </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Phone, Mail, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "./theme-toggle";
 
 const navLinks = [
   { href: "/", label: "Home", sectionId: "hero" },
@@ -76,7 +77,7 @@ export default function Header() {
         initial={{ y: 0 }}
         animate={{ y: utilityVisible ? 0 : -100 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#1a1a1a] text-white"
+        className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#1a1a1a] text-white dark:bg-[#0f0f0f] dark:border-gray-800"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 sm:gap-6">
@@ -108,7 +109,7 @@ export default function Header() {
           utilityVisible ? "top-[33px]" : "top-0"
         } ${
           scrolled
-            ? "bg-white/80 shadow-lg shadow-black/5 backdrop-blur-xl"
+            ? "bg-white/80 shadow-lg shadow-black/5 backdrop-blur-xl dark:bg-gray-900/80 dark:shadow-black/20"
             : "bg-transparent"
         }`}
       >
@@ -141,7 +142,7 @@ export default function Header() {
                     active
                       ? "text-[#8BB63A]"
                       : scrolled
-                        ? "text-gray-700 hover:text-[#8BB63A]"
+                        ? "text-gray-700 hover:text-[#8BB63A] dark:text-gray-200 dark:hover:text-[#8BB63A]"
                         : "text-white hover:text-[#8BB63A]"
                   }`}
                 >
@@ -159,47 +160,55 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Desktop CTA */}
-          <Link
-            href="/contact"
-            className="group relative hidden overflow-hidden rounded-lg bg-[#8BB63A] px-6 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#8BB63A]/25 md:inline-block"
-          >
-            <span className="relative z-10">Free Estimate</span>
-            <span className="absolute inset-0 animate-pulse rounded-lg bg-white/10" />
-          </Link>
+          {/* Desktop CTA + Theme Toggle */}
+          <div className="hidden items-center gap-3 md:flex">
+            <ThemeToggle />
+            <Link
+              href="/contact"
+              className="group relative overflow-hidden rounded-lg bg-[#8BB63A] px-6 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#8BB63A]/25"
+            >
+              <span className="relative z-10">Free Estimate</span>
+              <span className="absolute inset-0 animate-pulse rounded-lg bg-white/10" />
+            </Link>
+          </div>
 
           {/* Mobile hamburger — morphing icon */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className={`relative z-[70] h-7 w-7 md:hidden ${
-              scrolled && !menuOpen ? "text-gray-800" : "text-white"
-            }`}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-          >
-            <motion.span
-              animate={
-                menuOpen
-                  ? { rotate: 45, y: 0, top: "50%" }
-                  : { rotate: 0, y: -4, top: "50%" }
-              }
-              transition={{ duration: 0.3 }}
-              className="absolute left-0 h-0.5 w-full -translate-y-1/2 rounded bg-current"
-            />
-            <motion.span
-              animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-              transition={{ duration: 0.2 }}
-              className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 rounded bg-current"
-            />
-            <motion.span
-              animate={
-                menuOpen
-                  ? { rotate: -45, y: 0, top: "50%" }
-                  : { rotate: 0, y: 4, top: "50%" }
-              }
-              transition={{ duration: 0.3 }}
-              className="absolute left-0 h-0.5 w-full -translate-y-1/2 rounded bg-current"
-            />
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={`relative z-[70] h-7 w-7 ${
+                scrolled && !menuOpen
+                  ? "text-gray-800 dark:text-gray-200"
+                  : "text-white"
+              }`}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+            >
+              <motion.span
+                animate={
+                  menuOpen
+                    ? { rotate: 45, y: 0, top: "50%" }
+                    : { rotate: 0, y: -4, top: "50%" }
+                }
+                transition={{ duration: 0.3 }}
+                className="absolute left-0 h-0.5 w-full -translate-y-1/2 rounded bg-current"
+              />
+              <motion.span
+                animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.2 }}
+                className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 rounded bg-current"
+              />
+              <motion.span
+                animate={
+                  menuOpen
+                    ? { rotate: -45, y: 0, top: "50%" }
+                    : { rotate: 0, y: 4, top: "50%" }
+                }
+                transition={{ duration: 0.3 }}
+                className="absolute left-0 h-0.5 w-full -translate-y-1/2 rounded bg-current"
+              />
+            </button>
+          </div>
         </div>
       </header>
 

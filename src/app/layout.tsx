@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "./(public)/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,9 +18,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+        <script dangerouslySetInnerHTML={{ __html: `
+          try {
+            const theme = localStorage.getItem('gdl-theme');
+            const isDark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark) document.documentElement.classList.add('dark');
+          } catch {}
+        ` }} />
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

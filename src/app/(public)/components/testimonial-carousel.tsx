@@ -85,14 +85,14 @@ export default function TestimonialCarousel({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="flex h-full flex-col rounded-2xl bg-white p-8 shadow-sm shadow-black/5 transition-shadow duration-300 hover:shadow-md hover:shadow-black/10"
+                className="flex h-full flex-col rounded-2xl bg-white dark:bg-[#1e1e1e] p-8 shadow-sm shadow-black/5 dark:shadow-black/20 transition-shadow duration-300 hover:shadow-md hover:shadow-black/10 dark:hover:shadow-black/30"
               >
                 <QuoteIcon />
-                <p className="mb-6 flex-1 text-base leading-relaxed text-gray-600 italic">
+                <p className="mb-6 flex-1 text-base leading-relaxed text-gray-600 dark:text-gray-300 italic">
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="border-t border-gray-100 pt-4">
-                  <p className="text-sm font-bold text-[#1a1a1a]">
+                <div className="border-t border-gray-100 dark:border-gray-700 pt-4">
+                  <p className="text-sm font-bold text-[#1a1a1a] dark:text-white">
                     {t.author_name}
                   </p>
                   <p className="text-xs text-gray-400">{t.author_location}</p>
@@ -114,7 +114,7 @@ export default function TestimonialCarousel({
               className={`h-2.5 rounded-full transition-all duration-300 ${
                 i === selectedIndex
                   ? "w-8 bg-[#8BB63A]"
-                  : "w-2.5 bg-gray-300 hover:bg-gray-400"
+                  : "w-2.5 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
               }`}
             />
           ))}

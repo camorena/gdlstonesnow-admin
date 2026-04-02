@@ -4,6 +4,7 @@ import Link from "next/link";
 import AnimatedSection from "./components/animated-section";
 import AnimatedCounter from "./components/animated-counter";
 import TestimonialCarousel from "./components/testimonial-carousel";
+import Hero from "./components/hero";
 
 export const revalidate = 60;
 
@@ -152,88 +153,64 @@ export default async function HomePage() {
   return (
     <>
       {/* ========== HERO SECTION ========== */}
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
-        <Image
-          src={heroImage}
-          alt="Professional landscaping and snow removal services"
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-transparent" />
-
-        <div className="relative z-10 mx-auto max-w-5xl px-4 text-center">
-          <AnimatedSection delay={200}>
-            <span className="mb-6 inline-block rounded-full bg-[#8BB63A]/20 px-5 py-2 text-sm font-semibold tracking-wide text-[#8BB63A] backdrop-blur-sm ring-1 ring-[#8BB63A]/30">
-              Serving the Twin Cities Since 2003
-            </span>
-          </AnimatedSection>
-
-          <AnimatedSection delay={400}>
-            <h1 className="mt-4 text-5xl font-bold leading-tight tracking-tight text-white md:text-6xl lg:text-7xl">
-              Professional Landscaping
-              <br />
-              <span className="text-[#8BB63A]">&amp;</span> Snow Removal
-            </h1>
-          </AnimatedSection>
-
-          <AnimatedSection delay={600}>
-            <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-gray-200">
-              Expert landscaping, masonry, stone work, and snow removal services
-              in Bloomington, MN
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={800}>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                href="/contact"
-                className="rounded-full bg-[#8BB63A] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-[#8BB63A]/25 transition-all duration-300 hover:bg-[#7aa132] hover:shadow-xl hover:shadow-[#8BB63A]/30"
-              >
-                Get Free Estimate
-              </Link>
-              <Link
-                href="/gallery"
-                className="rounded-full border border-white/30 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20"
-              >
-                View Our Work
-              </Link>
-            </div>
-          </AnimatedSection>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          <div className="flex animate-bounce flex-col items-center text-white/60">
-            <span className="mb-2 text-xs font-medium uppercase tracking-widest">
-              Scroll
-            </span>
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      <Hero
+        title="Professional Landscaping & Snow Removal"
+        subtitle="Expert landscaping, masonry, stone work, and snow removal services serving the Twin Cities since 2003"
+        backgroundImage={heroImage}
+        size="full"
+        overlay="gradient"
+      >
+        <div className="flex flex-col items-center">
+          <span className="mb-6 inline-block rounded-full bg-[#8BB63A]/20 px-5 py-2 text-sm font-semibold tracking-wide text-[#8BB63A] backdrop-blur-sm ring-1 ring-[#8BB63A]/30">
+            Serving the Twin Cities Since 2003
+          </span>
+          <div className="mt-4 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/contact"
+              className="rounded-full bg-[#8BB63A] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-[#8BB63A]/25 transition-all duration-300 hover:bg-[#7aa132] hover:shadow-xl hover:shadow-[#8BB63A]/30"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
+              Get Free Estimate
+            </Link>
+            <Link
+              href="/gallery"
+              className="rounded-full border border-white/30 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20"
+            >
+              View Our Work
+            </Link>
           </div>
         </div>
-      </section>
+      </Hero>
+
+      {/* Scroll indicator */}
+      <div className="relative -mt-16 z-20 mb-8 flex justify-center">
+        <div className="flex animate-bounce flex-col items-center text-white/60">
+          <span className="mb-2 text-xs font-medium uppercase tracking-widest">
+            Scroll
+          </span>
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
+        </div>
+      </div>
 
       {/* ========== SERVICES SECTION ========== */}
-      <section className="bg-white py-24">
+      <section className="bg-white dark:bg-[#0f0f0f] py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center">
             <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
               What We Do
             </p>
-            <h2 className="mt-3 text-4xl font-bold text-[#1a1a1a] sm:text-5xl">
+            <h2 className="mt-3 text-4xl font-bold text-[#1a1a1a] dark:text-white sm:text-5xl">
               Our Services
             </h2>
           </AnimatedSection>
@@ -258,7 +235,7 @@ export default async function HomePage() {
                 >
                   <Link
                     href="/services"
-                    className="group relative block overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+                    className="group relative block overflow-hidden rounded-2xl bg-white dark:bg-[#1e1e1e] shadow-md dark:shadow-black/20 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/30"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <Image
@@ -278,7 +255,7 @@ export default async function HomePage() {
                       </div>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-[#1a1a1a]">
+                      <h3 className="text-xl font-bold text-[#1a1a1a] dark:text-white">
                         {service.title}
                       </h3>
                       {service.service_items &&
@@ -347,7 +324,7 @@ export default async function HomePage() {
       </section>
 
       {/* ========== ABOUT SECTION ========== */}
-      <section className="bg-[#f9fafb] py-24">
+      <section className="bg-[#f9fafb] dark:bg-[#111111] py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-16 lg:grid-cols-2">
             <AnimatedSection direction="left" delay={0}>
@@ -372,26 +349,26 @@ export default async function HomePage() {
               <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
                 About Us
               </p>
-              <h2 className="mt-3 text-3xl font-bold text-[#1a1a1a] sm:text-4xl lg:text-5xl">
+              <h2 className="mt-3 text-3xl font-bold text-[#1a1a1a] dark:text-white sm:text-4xl lg:text-5xl">
                 Your Trusted Partner
                 <br />
                 Since 2003
               </h2>
               {aboutCompany?.body ? (
                 <div
-                  className="mt-6 space-y-4 text-lg leading-relaxed text-gray-600"
+                  className="mt-6 space-y-4 text-lg leading-relaxed text-gray-600 dark:text-gray-300"
                   dangerouslySetInnerHTML={{ __html: aboutCompany.body }}
                 />
               ) : (
                 <div className="mt-6 space-y-4">
-                  <p className="text-lg leading-relaxed text-gray-600">
+                  <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-300">
                     GDL has been in the Landscape Industry since 2003, creating
                     and mastering landscape designs throughout the Twin Cities.
                     We take pride in providing top notch service along with
                     industry leading principles and procedures in landscape
                     design.
                   </p>
-                  <p className="text-lg leading-relaxed text-gray-600">
+                  <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-300">
                     Our company delivers its promise to you, our client, and
                     values your business. The needs of your business remain our
                     top priority for the entire period of service.
@@ -405,7 +382,7 @@ export default async function HomePage() {
                   "Free Estimates",
                   "Satisfaction Guaranteed",
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-gray-700">
+                  <li key={item} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                     <svg
                       className="h-5 w-5 flex-shrink-0 text-[#8BB63A]"
                       fill="currentColor"
@@ -435,13 +412,13 @@ export default async function HomePage() {
       </section>
 
       {/* ========== FEATURED PROJECTS ========== */}
-      <section className="bg-white py-24">
+      <section className="bg-white dark:bg-[#0f0f0f] py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center">
             <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
               Our Work
             </p>
-            <h2 className="mt-3 text-4xl font-bold text-[#1a1a1a] sm:text-5xl">
+            <h2 className="mt-3 text-4xl font-bold text-[#1a1a1a] dark:text-white sm:text-5xl">
               Featured Projects
             </h2>
           </AnimatedSection>
@@ -555,19 +532,19 @@ export default async function HomePage() {
       </section>
 
       {/* ========== SERVICE AREA ========== */}
-      <section className="bg-[#f9fafb] py-16">
+      <section className="bg-[#f9fafb] dark:bg-[#111111] py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center">
             <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
               Service Area
             </p>
-            <h2 className="mt-3 text-2xl font-bold text-[#1a1a1a] sm:text-3xl">
+            <h2 className="mt-3 text-2xl font-bold text-[#1a1a1a] dark:text-white sm:text-3xl">
               Proudly Serving
             </h2>
             <div className="mx-auto mt-8 flex max-w-4xl flex-wrap items-center justify-center gap-x-2 gap-y-3">
               {serviceAreas.map((area, index) => (
                 <span key={area} className="flex items-center">
-                  <span className="text-base font-medium text-gray-700 sm:text-lg">
+                  <span className="text-base font-medium text-gray-700 dark:text-gray-300 sm:text-lg">
                     {area}
                   </span>
                   {index < serviceAreas.length - 1 && (
@@ -578,7 +555,7 @@ export default async function HomePage() {
                 </span>
               ))}
             </div>
-            <p className="mt-6 text-gray-500">
+            <p className="mt-6 text-gray-500 dark:text-gray-400">
               And surrounding communities in the Twin Cities metro area
             </p>
           </AnimatedSection>

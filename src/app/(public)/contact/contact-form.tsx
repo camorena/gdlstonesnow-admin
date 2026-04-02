@@ -126,10 +126,10 @@ export default function ContactForm() {
         }}
       />
 
-      <div className="rounded-2xl bg-white p-8 shadow-xl lg:p-10">
+      <div className="rounded-2xl bg-white dark:bg-[#1e1e1e] p-8 shadow-xl dark:shadow-black/20 lg:p-10">
         {/* Title with green underline */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-[#1a1a1a]">
+          <h2 className="text-2xl font-bold text-[#1a1a1a] dark:text-white">
             Send Us a Message
           </h2>
           <div className="mt-2 h-1 w-16 rounded-full bg-[#8BB63A]" />
@@ -171,14 +171,14 @@ export default function ContactForm() {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-[#1a1a1a]">
+            <h3 className="text-2xl font-bold text-[#1a1a1a] dark:text-white">
               Message Sent!
             </h3>
-            <p className="mt-3 max-w-md leading-relaxed text-gray-600">
+            <p className="mt-3 max-w-md leading-relaxed text-gray-600 dark:text-gray-300">
               Thank you, <strong>{result.name}</strong>. Our team will review
               your inquiry and reach out within one business day.
             </p>
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
               For immediate assistance, call{" "}
               <a
                 href="tel:9528826182"
@@ -205,7 +205,7 @@ export default function ContactForm() {
 
         {/* Error State */}
         {result?.type === "error" && (
-          <div className="rounded-xl border-2 border-red-200 bg-red-50 p-6">
+          <div className="rounded-xl border-2 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/30 p-6">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-red-500">
                 <svg
@@ -223,10 +223,10 @@ export default function ContactForm() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-red-800">
+                <h3 className="text-lg font-bold text-red-800 dark:text-red-300">
                   Unable to Send Message
                 </h3>
-                <p className="mt-2 leading-relaxed text-red-700">
+                <p className="mt-2 leading-relaxed text-red-700 dark:text-red-400">
                   Something went wrong. Please try again or contact us directly
                   at{" "}
                   <a
@@ -238,7 +238,7 @@ export default function ContactForm() {
                 </p>
                 <button
                   onClick={() => setResult(null)}
-                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-red-100 px-4 py-2 text-sm font-semibold text-red-700 transition-colors hover:bg-red-200"
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-red-100 dark:bg-red-900/40 px-4 py-2 text-sm font-semibold text-red-700 dark:text-red-300 transition-colors hover:bg-red-200 dark:hover:bg-red-900/60"
                 >
                   <svg
                     className="h-4 w-4"
@@ -272,7 +272,7 @@ export default function ContactForm() {
                   type="text"
                   placeholder=" "
                   required
-                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
+                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] dark:text-white transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
                     errors.name
                       ? "border-red-400 bg-red-50 focus:ring-red-400"
                       : "border-gray-300 bg-white focus:ring-[#8BB63A]"
@@ -283,7 +283,7 @@ export default function ContactForm() {
                 />
                 <label
                   htmlFor="contact-name"
-                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
+                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 dark:text-gray-500 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
                     errors.name ? "text-red-400" : ""
                   }`}
                 >
@@ -299,7 +299,7 @@ export default function ContactForm() {
                   type="email"
                   placeholder=" "
                   required
-                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
+                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] dark:text-white transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
                     errors.email
                       ? "border-red-400 bg-red-50 focus:ring-red-400"
                       : "border-gray-300 bg-white focus:ring-[#8BB63A]"
@@ -310,7 +310,7 @@ export default function ContactForm() {
                 />
                 <label
                   htmlFor="contact-email"
-                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
+                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 dark:text-gray-500 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
                     errors.email ? "text-red-400" : ""
                   }`}
                 >
@@ -326,7 +326,7 @@ export default function ContactForm() {
                   type="tel"
                   placeholder=" "
                   required
-                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
+                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] dark:text-white transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
                     errors.phone
                       ? "border-red-400 bg-red-50 focus:ring-red-400"
                       : "border-gray-300 bg-white focus:ring-[#8BB63A]"
@@ -337,7 +337,7 @@ export default function ContactForm() {
                 />
                 <label
                   htmlFor="contact-phone"
-                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
+                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 dark:text-gray-500 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
                     errors.phone ? "text-red-400" : ""
                   }`}
                 >
@@ -353,7 +353,7 @@ export default function ContactForm() {
                   type="text"
                   placeholder=" "
                   required
-                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
+                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] dark:text-white transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
                     errors.address
                       ? "border-red-400 bg-red-50 focus:ring-red-400"
                       : "border-gray-300 bg-white focus:ring-[#8BB63A]"
@@ -365,7 +365,7 @@ export default function ContactForm() {
                 />
                 <label
                   htmlFor="contact-address"
-                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
+                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 dark:text-gray-500 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
                     errors.address ? "text-red-400" : ""
                   }`}
                 >
@@ -381,7 +381,7 @@ export default function ContactForm() {
                   type="text"
                   placeholder=" "
                   required
-                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
+                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] dark:text-white transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
                     errors.city
                       ? "border-red-400 bg-red-50 focus:ring-red-400"
                       : "border-gray-300 bg-white focus:ring-[#8BB63A]"
@@ -392,7 +392,7 @@ export default function ContactForm() {
                 />
                 <label
                   htmlFor="contact-city"
-                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
+                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 dark:text-gray-500 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
                     errors.city ? "text-red-400" : ""
                   }`}
                 >
@@ -410,7 +410,7 @@ export default function ContactForm() {
                   pattern="[0-9]{5}"
                   maxLength={5}
                   required
-                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
+                  className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] dark:text-white transition-all focus:outline-none focus:ring-2 focus:border-transparent ${
                     errors.zipcode
                       ? "border-red-400 bg-red-50 focus:ring-red-400"
                       : "border-gray-300 bg-white focus:ring-[#8BB63A]"
@@ -422,7 +422,7 @@ export default function ContactForm() {
                 />
                 <label
                   htmlFor="contact-zipcode"
-                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
+                  className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 dark:text-gray-500 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
                     errors.zipcode ? "text-red-400" : ""
                   }`}
                 >
@@ -439,10 +439,10 @@ export default function ContactForm() {
                 placeholder=" "
                 required
                 rows={5}
-                className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] transition-all focus:outline-none focus:ring-2 focus:border-transparent resize-none ${
+                className={`peer w-full rounded-lg border px-4 pb-3 pt-6 text-[#1a1a1a] dark:text-white transition-all focus:outline-none focus:ring-2 focus:border-transparent resize-none ${
                   errors.message
-                    ? "border-red-400 bg-red-50 focus:ring-red-400"
-                    : "border-gray-300 bg-white focus:ring-[#8BB63A]"
+                    ? "border-red-400 bg-red-50 dark:bg-red-900/20 focus:ring-red-400"
+                    : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-[#8BB63A]"
                 }`}
                 onChange={() =>
                   errors.message &&
@@ -451,7 +451,7 @@ export default function ContactForm() {
               />
               <label
                 htmlFor="contact-message"
-                className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
+                className={`pointer-events-none absolute left-4 top-5 origin-left text-gray-400 dark:text-gray-500 transition-all duration-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3 peer-focus:scale-[0.85] peer-focus:text-[#8BB63A] peer-[:not(:placeholder-shown)]:-translate-y-3 peer-[:not(:placeholder-shown)]:scale-[0.85] ${
                   errors.message ? "text-red-400" : ""
                 }`}
               >

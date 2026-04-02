@@ -123,7 +123,7 @@ export default async function PublicLayout({
       <main>{children}</main>
 
       {/* Footer */}
-      <footer className="bg-[#1a1a1a] text-gray-300">
+      <footer className="bg-[#1a1a1a] text-gray-300 dark:bg-[#0a0a0a] dark:text-gray-400">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-3">
             {/* Col 1: Logo + Description */}
@@ -137,7 +137,7 @@ export default async function PublicLayout({
                   className="mb-4 h-14 w-auto"
                 />
               </Link>
-              <p className="mt-4 text-sm leading-relaxed text-gray-400">
+              <p className="mt-4 text-sm leading-relaxed text-gray-400 dark:text-gray-500">
                 {s.business_name} has been providing expert landscaping, masonry,
                 lawn care, and snow removal services to the Twin Cities metro area
                 since 2003. Quality workmanship and customer satisfaction are our
@@ -147,13 +147,13 @@ export default async function PublicLayout({
 
             {/* Col 2: Quick Links */}
             <div>
-              <h3 className="mb-4 text-lg font-semibold text-white">Quick Links</h3>
+              <h3 className="mb-4 text-lg font-semibold text-white dark:text-gray-100">Quick Links</h3>
               <ul className="space-y-2">
                 {quickLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-400 transition-colors hover:text-[#8BB63A]"
+                      className="text-sm text-gray-400 transition-colors hover:text-[#8BB63A] dark:text-gray-500 dark:hover:text-[#8BB63A]"
                     >
                       {link.label}
                     </Link>
@@ -164,7 +164,7 @@ export default async function PublicLayout({
 
             {/* Col 3: Contact Info + Social */}
             <div>
-              <h3 className="mb-4 text-lg font-semibold text-white">Contact Info</h3>
+              <h3 className="mb-4 text-lg font-semibold text-white dark:text-gray-100">Contact Info</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#8BB63A]" />
@@ -173,18 +173,18 @@ export default async function PublicLayout({
                 <li className="flex items-start gap-3">
                   <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#8BB63A]" />
                   <div>
-                    <a href={`tel:${s.phone_office_raw}`} className="hover:text-[#8BB63A]">
+                    <a href={`tel:${s.phone_office_raw}`} className="transition-colors hover:text-[#8BB63A]">
                       Office: {s.phone_office}
                     </a>
                     <br />
-                    <a href={`tel:${s.phone_sales_raw}`} className="hover:text-[#8BB63A]">
+                    <a href={`tel:${s.phone_sales_raw}`} className="transition-colors hover:text-[#8BB63A]">
                       Sales: {s.phone_sales}
                     </a>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
                   <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#8BB63A]" />
-                  <a href={`mailto:${s.email}`} className="hover:text-[#8BB63A]">
+                  <a href={`mailto:${s.email}`} className="transition-colors hover:text-[#8BB63A]">
                     {s.email}
                   </a>
                 </li>
@@ -202,7 +202,7 @@ export default async function PublicLayout({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Visit our Facebook page"
-                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white"
+                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white dark:bg-gray-800/60 dark:text-gray-500 dark:hover:bg-[#8BB63A] dark:hover:text-white"
                   >
                     <FacebookIcon className="h-5 w-5" />
                   </a>
@@ -213,7 +213,7 @@ export default async function PublicLayout({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Visit our Instagram profile"
-                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white"
+                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white dark:bg-gray-800/60 dark:text-gray-500 dark:hover:bg-[#8BB63A] dark:hover:text-white"
                   >
                     <InstagramIcon className="h-5 w-5" />
                   </a>
@@ -224,7 +224,7 @@ export default async function PublicLayout({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Visit our YouTube channel"
-                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white"
+                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white dark:bg-gray-800/60 dark:text-gray-500 dark:hover:bg-[#8BB63A] dark:hover:text-white"
                   >
                     <YoutubeIcon className="h-5 w-5" />
                   </a>
@@ -235,9 +235,9 @@ export default async function PublicLayout({
         </div>
 
         {/* Copyright Row */}
-        <div className="border-t border-gray-800">
+        <div className="border-t border-gray-800 dark:border-gray-800/60">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-gray-500 dark:text-gray-600">
               &copy; {new Date().getFullYear()} {s.business_name}. All rights reserved.
             </p>
           </div>

@@ -49,6 +49,11 @@
 }
 
 :root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -84,6 +89,11 @@
 }
 
 .dark {
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --border-color: #374151;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

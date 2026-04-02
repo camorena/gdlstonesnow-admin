@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "../components/animated-section";
+import Hero from "@/app/(public)/components/hero";
 
 export const revalidate = 60;
 
@@ -74,45 +75,20 @@ export default async function PromotionsPage() {
     seasonStyles[currentSeason]?.gradient ?? seasonStyles.spring.gradient;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero with seasonal gradient */}
-      <section className={`relative overflow-hidden bg-gradient-to-r ${heroGradient}`}>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-white/30" />
-          <div className="absolute -bottom-20 right-1/4 h-96 w-96 rounded-full bg-white/20" />
-          <div className="absolute right-0 top-1/3 h-64 w-64 rounded-full bg-white/25" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <nav className="mb-6" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-sm text-white/70">
-              <li>
-                <Link
-                  href="/"
-                  className="transition-colors hover:text-white"
-                >
-                  Home
-                </Link>
-              </li>
-              <li className="select-none">/</li>
-              <li className="text-white">Promotions</li>
-            </ol>
-          </nav>
-          <h1 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
-            Seasonal Promotions
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/90">
-            Take advantage of our seasonal offers on landscaping, stone work, and
-            snow removal services.
-          </p>
-          <div className="mt-6 h-1 w-20 rounded-full bg-white/50" />
-        </div>
-      </section>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#111111]">
+      <Hero
+        title="Seasonal Promotions"
+        subtitle="Take advantage of our seasonal offers on landscaping, stone work, and snow removal services"
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Promotions" }]}
+        backgroundImage="/images/pages/480x320/promotions-1.jpg"
+        size="large"
+      />
 
       {/* Promotions Grid */}
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         {sortedPromotions.length === 0 ? (
           <div className="py-20 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
               <svg
                 className="h-8 w-8 text-gray-400"
                 fill="none"
@@ -127,7 +103,7 @@ export default async function PromotionsPage() {
                 />
               </svg>
             </div>
-            <p className="text-lg text-gray-500">
+            <p className="text-lg text-gray-500 dark:text-gray-400">
               No active promotions at this time. Check back soon!
             </p>
           </div>
@@ -142,7 +118,7 @@ export default async function PromotionsPage() {
               return (
                 <AnimatedSection key={promo.id} delay={index * 120}>
                   <div
-                    className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${
+                    className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white dark:bg-[#1e1e1e] shadow-md dark:shadow-black/20 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/30 ${
                       isCurrentSeason
                         ? "ring-2 ring-[#8BB63A] animate-[pulse-glow_3s_ease-in-out_infinite]"
                         : ""
@@ -213,7 +189,7 @@ export default async function PromotionsPage() {
 
                     {/* Content */}
                     <div className="flex flex-1 flex-col p-7">
-                      <h3 className="text-xl font-bold tracking-tight text-[#1a1a1a]">
+                      <h3 className="text-xl font-bold tracking-tight text-[#1a1a1a] dark:text-white">
                         {promo.title}
                       </h3>
 
@@ -225,7 +201,7 @@ export default async function PromotionsPage() {
                               className="flex items-start gap-3"
                             >
                               <span className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-[#8BB63A]" />
-                              <span className="text-sm leading-relaxed text-gray-600">
+                              <span className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
                                 {item.title}
                               </span>
                             </li>

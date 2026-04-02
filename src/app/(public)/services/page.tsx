@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "@/app/(public)/components/animated-section";
+import Hero from "@/app/(public)/components/hero";
 
 export const revalidate = 60;
 
@@ -32,42 +33,14 @@ export default async function ServicesPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero with Background Image */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/slider/slider-1-3.jpg"
-            alt="GDL Stone Snow services background"
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/90 via-[#1a1a1a]/80 to-[#1a1a1a]/70" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <nav className="mb-6" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-sm text-gray-400">
-              <li>
-                <Link href="/" className="transition-colors hover:text-[#8BB63A]">
-                  Home
-                </Link>
-              </li>
-              <li className="select-none">/</li>
-              <li className="text-[#8BB63A]">Services</li>
-            </ol>
-          </nav>
-          <h1 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
-            Our Services
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-300">
-            From expert landscaping and masonry to reliable snow removal, we deliver
-            premium outdoor solutions tailored to your property.
-          </p>
-          <div className="mt-6 h-1 w-20 rounded-full bg-[#8BB63A]" />
-        </div>
-      </section>
+    <div className="min-h-screen bg-white dark:bg-[#0f0f0f]">
+      <Hero
+        title="Our Services"
+        subtitle="Comprehensive landscaping, masonry, and snow removal solutions for residential and commercial properties"
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services" }]}
+        backgroundImage="/images/slider/slider-1-3.jpg"
+        size="large"
+      />
 
       {/* Services */}
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -82,7 +55,7 @@ export default async function ServicesPage() {
             >
               <section
                 className={`flex flex-col items-center gap-12 lg:gap-20 ${
-                  index > 0 ? "mt-24 border-t border-gray-100 pt-24" : ""
+                  index > 0 ? "mt-24 border-t border-gray-100 dark:border-gray-700 pt-24" : ""
                 } ${isEven ? "lg:flex-row-reverse" : "lg:flex-row"}`}
               >
                 {/* Image */}
@@ -114,7 +87,7 @@ export default async function ServicesPage() {
                 {/* Content */}
                 <div className="w-full lg:w-1/2">
                   <div className="mb-4 h-1 w-12 rounded-full bg-[#8BB63A]" />
-                  <h2 className="text-3xl font-bold tracking-tight text-[#1a1a1a] md:text-4xl">
+                  <h2 className="text-3xl font-bold tracking-tight text-[#1a1a1a] dark:text-white md:text-4xl">
                     {service.title}
                   </h2>
 
@@ -123,7 +96,7 @@ export default async function ServicesPage() {
                     {service.service_items.map((item) => (
                       <span
                         key={item.id}
-                        className="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-medium text-green-800 transition-colors hover:bg-green-100"
+                        className="inline-flex items-center gap-2 rounded-full bg-green-50 dark:bg-green-900/30 px-4 py-2 text-sm font-medium text-green-800 dark:text-green-400 transition-colors hover:bg-green-100 dark:hover:bg-green-900/50"
                       >
                         <svg
                           className="h-4 w-4 text-[#8BB63A]"

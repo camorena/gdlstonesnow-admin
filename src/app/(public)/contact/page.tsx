@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ContactForm from "./contact-form";
 import AnimatedSection from "../components/animated-section";
+import Hero from "@/app/(public)/components/hero";
 
 export const revalidate = 60;
 
@@ -45,38 +46,14 @@ export default async function ContactPage() {
     : "";
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[#1a1a1a]">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute left-1/3 top-0 h-96 w-96 rounded-full bg-[#8BB63A] blur-3xl" />
-          <div className="absolute bottom-0 right-1/3 h-96 w-96 rounded-full bg-[#8BB63A] blur-3xl" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <nav className="mb-6" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-sm text-gray-400">
-              <li>
-                <Link
-                  href="/"
-                  className="transition-colors hover:text-[#8BB63A]"
-                >
-                  Home
-                </Link>
-              </li>
-              <li className="select-none">/</li>
-              <li className="text-[#8BB63A]">Contact</li>
-            </ol>
-          </nav>
-          <h1 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
-            Get In Touch
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-300">
-            We&apos;d love to hear from you. Reach out for a free estimate or to
-            learn more about our services.
-          </p>
-          <div className="mt-6 h-1 w-20 rounded-full bg-[#8BB63A]" />
-        </div>
-      </section>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#111111]">
+      <Hero
+        title="Get In Touch"
+        subtitle="We'd love to hear about your next project. Reach out for a free estimate."
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
+        backgroundImage="/images/slider/slider-1-1.jpg"
+        size="large"
+      />
 
       {/* Contact Form + Info - Two columns */}
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -310,7 +287,7 @@ export default async function ContactPage() {
 
       {/* Google Maps - Full Width */}
       <AnimatedSection className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-2xl shadow-xl">
+        <div className="overflow-hidden rounded-2xl shadow-xl dark:shadow-black/20 dark:border dark:border-gray-700">
           <div
             className="relative w-full"
             style={{ paddingBottom: "40%", minHeight: "300px" }}
@@ -328,21 +305,21 @@ export default async function ContactPage() {
       </AnimatedSection>
 
       {/* Who We Are */}
-      <div className="bg-white">
+      <div className="bg-white dark:bg-[#0f0f0f]">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <h2 className="text-3xl font-bold tracking-tight text-[#1a1a1a]">
+            <h2 className="text-3xl font-bold tracking-tight text-[#1a1a1a] dark:text-white">
               {whoWeAre?.heading || "Who We Are"}
             </h2>
             <div className="mt-2 h-1 w-16 rounded-full bg-[#8BB63A]" />
             {whoWeAre?.body ? (
-              <div className="mt-8 max-w-4xl space-y-4 leading-relaxed text-gray-600">
+              <div className="mt-8 max-w-4xl space-y-4 leading-relaxed text-gray-600 dark:text-gray-300">
                 {whoWeAre.body.split("\n\n").map((paragraph, i) => (
                   <p key={i}>{paragraph}</p>
                 ))}
               </div>
             ) : (
-              <div className="mt-8 max-w-4xl space-y-4 leading-relaxed text-gray-600">
+              <div className="mt-8 max-w-4xl space-y-4 leading-relaxed text-gray-600 dark:text-gray-300">
                 <p>
                   In 2003 Fernando Floersch, owner of GDL-Stone Snow LLC.,
                   created a united front and a shared belief that caring for our
@@ -366,14 +343,14 @@ export default async function ContactPage() {
           </AnimatedSection>
 
           <AnimatedSection delay={200} className="mt-12">
-            <h3 className="text-2xl font-bold tracking-tight text-[#1a1a1a]">
+            <h3 className="text-2xl font-bold tracking-tight text-[#1a1a1a] dark:text-white">
               {ourMission?.heading || "Our Mission Is To:"}
             </h3>
             <ul className="mt-6 max-w-3xl space-y-4">
               {missionItems.map((item, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-4 rounded-xl border-l-4 border-[#8BB63A] bg-green-50/50 py-3 pl-5 pr-4"
+                  className="flex items-start gap-4 rounded-xl border-l-4 border-[#8BB63A] bg-green-50/50 dark:bg-green-900/20 py-3 pl-5 pr-4"
                 >
                   <svg
                     className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#8BB63A]"
@@ -386,7 +363,7 @@ export default async function ContactPage() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="leading-relaxed text-gray-700">{item}</span>
+                  <span className="leading-relaxed text-gray-700 dark:text-gray-300">{item}</span>
                 </li>
               ))}
             </ul>
