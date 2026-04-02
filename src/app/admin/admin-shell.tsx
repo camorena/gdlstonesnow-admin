@@ -114,15 +114,15 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       {/* Main area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex h-14 shrink-0 items-center justify-between border-b bg-white px-4 shadow-sm">
+        <header className="flex h-14 shrink-0 items-center justify-between border-b bg-white dark:bg-gray-900 dark:border-gray-700 px-4 shadow-sm">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="text-gray-600 hover:text-gray-900 lg:hidden"
+              className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white lg:hidden"
             >
               <Menu className="h-5 w-5" />
             </button>
-            <h1 className="text-sm font-semibold text-gray-900">
+            <h1 className="text-sm font-semibold text-gray-900 dark:text-white">
               GDL Stone Snow Admin
             </h1>
           </div>
@@ -135,7 +135,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
+        <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-950 p-6">
           {children}
         </main>
       </div>

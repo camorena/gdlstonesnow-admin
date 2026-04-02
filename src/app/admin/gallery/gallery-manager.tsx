@@ -288,9 +288,9 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
     modal.kind === "add-image" ||
     (modal.kind === "edit" && modal.item.type === "image");
 
-  const labelClass = "block text-sm font-medium text-gray-700 mb-1";
+  const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1";
   const selectClass =
-    "border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 md:text-sm";
+    "border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base text-gray-900 dark:text-white dark:bg-gray-800 dark:border-gray-600 shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 md:text-sm";
 
   return (
     <div>
@@ -410,9 +410,9 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
       {/* Modal Overlay */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="mx-4 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
+          <div className="mx-4 w-full max-w-lg rounded-xl bg-white dark:bg-gray-900 p-6 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 {modal.kind === "add-image"
                   ? "Add Image"
                   : modal.kind === "add-video"
