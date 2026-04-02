@@ -1,4 +1,5 @@
 "use client";
+import { revalidatePublicPages } from "@/lib/revalidate";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -57,7 +58,7 @@ export function ContentManager({ initialBlocks }: ContentManagerProps) {
         .eq("id", block.id);
 
       if (error) throw error;
-      toast.success("Content block saved successfully.");
+      await revalidatePublicPages(); toast.success("Content block saved successfully.");
       setEditingId(null);
     } catch {
       toast.error("Failed to save content block.");

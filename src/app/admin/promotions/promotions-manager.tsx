@@ -1,4 +1,5 @@
 "use client";
+import { revalidatePublicPages } from "@/lib/revalidate";
 
 import { useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -97,7 +98,7 @@ export function PromotionsManager({
       ...prev,
       [data.id]: { ...data, items: [] },
     }));
-    toast.success("Promotion created");
+    await revalidatePublicPages("/promotions"); toast.success("Promotion created");
   }
 
   async function handleSave(promotionId: string) {
@@ -179,7 +180,7 @@ export function PromotionsManager({
         },
       }));
 
-      toast.success("Promotion saved");
+      await revalidatePublicPages("/promotions"); toast.success("Promotion saved");
     } catch {
       toast.error("Failed to save promotion");
     } finally {
@@ -226,7 +227,7 @@ export function PromotionsManager({
       return next;
     });
     if (expandedId === promotionId) setExpandedId(null);
-    toast.success("Promotion deleted");
+    await revalidatePublicPages("/promotions"); toast.success("Promotion deleted");
   }
 
   function updateEditing(
@@ -304,7 +305,7 @@ export function PromotionsManager({
       if (!res.ok) throw new Error("Upload failed");
       const { url } = await res.json();
       updateEditing(promotionId, { image_url: url });
-      toast.success("Image uploaded");
+      await revalidatePublicPages("/promotions"); toast.success("Image uploaded");
     } catch {
       toast.error("Failed to upload image");
     }

@@ -1,4 +1,5 @@
 "use client";
+import { revalidatePublicPages } from "@/lib/revalidate";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -57,7 +58,7 @@ export function SettingsForm({ initialData }: SettingsFormProps) {
 
       if (error) throw error;
 
-      toast.success("Settings saved successfully.");
+      await revalidatePublicPages(); toast.success("Settings saved successfully.");
     } catch {
       toast.error("Failed to save settings. Please try again.");
     } finally {

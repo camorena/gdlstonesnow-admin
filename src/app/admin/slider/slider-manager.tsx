@@ -1,4 +1,5 @@
 "use client";
+import { revalidatePublicPages } from "@/lib/revalidate";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -51,7 +52,7 @@ export function SliderManager({ initialSlides }: SliderManagerProps) {
       if (error) throw error;
       setSlides((prev) => [...prev, data]);
       setEditingId(data.id);
-      toast.success("Slide added. Edit the details below.");
+      await revalidatePublicPages(); toast.success("Slide added. Edit the details below.");
     } catch {
       toast.error("Failed to add slide.");
     } finally {
@@ -79,7 +80,7 @@ export function SliderManager({ initialSlides }: SliderManagerProps) {
         .eq("id", slide.id);
 
       if (error) throw error;
-      toast.success("Slide saved successfully.");
+      await revalidatePublicPages(); toast.success("Slide saved successfully.");
       setEditingId(null);
     } catch {
       toast.error("Failed to save slide.");
@@ -101,7 +102,7 @@ export function SliderManager({ initialSlides }: SliderManagerProps) {
       if (error) throw error;
       setSlides((prev) => prev.filter((s) => s.id !== id));
       if (editingId === id) setEditingId(null);
-      toast.success("Slide deleted.");
+      await revalidatePublicPages(); toast.success("Slide deleted.");
     } catch {
       toast.error("Failed to delete slide.");
     } finally {
@@ -132,7 +133,7 @@ export function SliderManager({ initialSlides }: SliderManagerProps) {
       setSlides((prev) =>
         prev.map((s) => (s.id === slideId ? { ...s, image_url: url } : s))
       );
-      toast.success("Image uploaded.");
+      await revalidatePublicPages(); toast.success("Image uploaded.");
     } catch {
       toast.error("Failed to upload image.");
     } finally {

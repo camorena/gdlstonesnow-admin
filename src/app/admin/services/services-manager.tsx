@@ -1,4 +1,5 @@
 "use client";
+import { revalidatePublicPages } from "@/lib/revalidate";
 
 import { useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -86,7 +87,7 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
       ...prev,
       [data.id]: { ...data, items: [] },
     }));
-    toast.success("Service created");
+    await revalidatePublicPages("/services"); toast.success("Service created");
   }
 
   async function handleSave(serviceId: string) {
@@ -165,7 +166,7 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
         },
       }));
 
-      toast.success("Service saved");
+      await revalidatePublicPages("/services"); toast.success("Service saved");
     } catch {
       toast.error("Failed to save service");
     } finally {
@@ -206,7 +207,7 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
       return next;
     });
     if (expandedId === serviceId) setExpandedId(null);
-    toast.success("Service deleted");
+    await revalidatePublicPages("/services"); toast.success("Service deleted");
   }
 
   function updateEditing(serviceId: string, updates: Partial<EditingService>) {
@@ -274,7 +275,7 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
       if (!res.ok) throw new Error("Upload failed");
       const { url } = await res.json();
       updateEditing(serviceId, { image_url: url });
-      toast.success("Image uploaded");
+      await revalidatePublicPages("/services"); toast.success("Image uploaded");
     } catch {
       toast.error("Failed to upload image");
     }

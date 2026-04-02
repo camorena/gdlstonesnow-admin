@@ -1,4 +1,5 @@
 "use client";
+import { revalidatePublicPages } from "@/lib/revalidate";
 
 import { useState, useRef } from "react";
 import { toast } from "sonner";
@@ -167,7 +168,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
         if (error) throw error;
 
         setItems((prev) => [...prev, data]);
-        toast.success("Image added successfully.");
+        await revalidatePublicPages("/gallery"); toast.success("Image added successfully.");
         closeModal();
       } else if (modal.kind === "add-video") {
         if (!form.url.trim()) {
@@ -201,7 +202,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
         if (error) throw error;
 
         setItems((prev) => [...prev, data]);
-        toast.success("Video added successfully.");
+        await revalidatePublicPages("/gallery"); toast.success("Video added successfully.");
         closeModal();
       } else if (modal.kind === "edit") {
         const editItem = modal.item;
@@ -235,7 +236,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
         setItems((prev) =>
           prev.map((i) => (i.id === editItem.id ? data : i))
         );
-        toast.success("Gallery item updated.");
+        await revalidatePublicPages("/gallery"); toast.success("Gallery item updated.");
         closeModal();
       }
     } catch (err) {
@@ -258,7 +259,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
 
       setItems((prev) => prev.filter((i) => i.id !== id));
       setDeleteConfirm(null);
-      toast.success("Gallery item deleted.");
+      await revalidatePublicPages("/gallery"); toast.success("Gallery item deleted.");
     } catch {
       toast.error("Failed to delete item. Please try again.");
     }

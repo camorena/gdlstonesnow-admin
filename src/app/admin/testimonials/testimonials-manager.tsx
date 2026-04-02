@@ -1,4 +1,5 @@
 "use client";
+import { revalidatePublicPages } from "@/lib/revalidate";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -54,7 +55,7 @@ export function TestimonialsManager({
       if (error) throw error;
       setTestimonials((prev) => [...prev, data]);
       setEditingId(data.id);
-      toast.success("Testimonial added. Edit the details below.");
+      await revalidatePublicPages(); toast.success("Testimonial added. Edit the details below.");
     } catch {
       toast.error("Failed to add testimonial.");
     } finally {
@@ -78,7 +79,7 @@ export function TestimonialsManager({
         .eq("id", testimonial.id);
 
       if (error) throw error;
-      toast.success("Testimonial saved successfully.");
+      await revalidatePublicPages(); toast.success("Testimonial saved successfully.");
       setEditingId(null);
     } catch {
       toast.error("Failed to save testimonial.");
@@ -100,7 +101,7 @@ export function TestimonialsManager({
       if (error) throw error;
       setTestimonials((prev) => prev.filter((t) => t.id !== id));
       if (editingId === id) setEditingId(null);
-      toast.success("Testimonial deleted.");
+      await revalidatePublicPages(); toast.success("Testimonial deleted.");
     } catch {
       toast.error("Failed to delete testimonial.");
     } finally {
