@@ -82,8 +82,10 @@ export default function Lightbox({
 
   if (!item) return null;
 
-  const isVideo = item.type === "video";
-  const isYT = isVideo && isYouTubeUrl(item.url);
+  const itemUrl = item.image_url || item.url || "";
+  const isVideoItem = isYouTubeUrl(itemUrl) || /vimeo\.com/.test(itemUrl) || /\.(mp4|webm)$/i.test(itemUrl);
+  const isYT = isVideoItem && isYouTubeUrl(itemUrl);
+  const isVideo = isVideoItem;
 
   return (
     <AnimatePresence>
@@ -198,7 +200,7 @@ export default function Lightbox({
             {isYT ? (
               <div className="aspect-video w-[80vw] max-w-5xl">
                 <iframe
-                  src={getYouTubeEmbedUrl(item.url)}
+                  src={getYouTubeEmbedUrl(itemUrl)}
                   title={item.title ?? "Video"}
                   allow="autoplay; encrypted-media"
                   allowFullScreen
@@ -207,7 +209,7 @@ export default function Lightbox({
               </div>
             ) : isVideo ? (
               <video
-                src={item.url}
+                src={itemUrl}
                 controls
                 autoPlay
                 className="max-h-[85vh] w-auto rounded-xl"
@@ -216,7 +218,7 @@ export default function Lightbox({
               </video>
             ) : (
               <Image
-                src={item.url}
+                src={item.image_url || item.url || ""}
                 alt={item.alt_text ?? item.title ?? "Gallery image"}
                 width={1200}
                 height={800}

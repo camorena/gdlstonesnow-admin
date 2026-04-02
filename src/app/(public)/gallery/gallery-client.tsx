@@ -13,6 +13,23 @@ const FILTER_TABS = [
   { label: "Snow Removal", value: "Snow Removal" },
 ] as const;
 
+function isVideo(item: GalleryItem): boolean {
+  const url = (item.image_url || item.url || "").toLowerCase();
+  return url.includes("youtube.com") || url.includes("youtu.be") || url.includes("vimeo.com") || url.endsWith(".mp4") || url.endsWith(".webm");
+}
+
+function getVideoUrl(item: GalleryItem): string {
+  return item.image_url || item.url || "";
+}
+
+function getThumbnail(item: GalleryItem): string {
+  if (item.thumbnail_url) return item.thumbnail_url;
+  const url = getVideoUrl(item);
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg`;
+  return item.image_url || "";
+}
+
 interface GalleryClientProps {
   items: GalleryItem[];
 }
@@ -90,10 +107,10 @@ export default function GalleryClient({ items }: GalleryClientProps) {
                   className="group relative w-full overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8BB63A] focus-visible:ring-offset-2"
                 >
                   <Image
-                    src={item.thumbnail_url ?? item.url}
+                    src={isVideo(item) ? getThumbnail(item) : (item.thumbnail_url || item.image_url || item.url || "")}
                     alt={item.alt_text ?? `${item.title || "Project"} by GDL Stone Snow in Bloomington MN`}
                     width={600}
-                    height={item.type === "video" ? 338 : 450}
+                    height={isVideo(item) ? 338 : 450}
                     className="w-full object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
@@ -124,7 +141,7 @@ export default function GalleryClient({ items }: GalleryClientProps) {
                   </div>
 
                   {/* Video play button */}
-                  {item.type === "video" && (
+                  {isVideo(item) && (
                     <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300">
                       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1a1a1a]/60 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                         <svg
