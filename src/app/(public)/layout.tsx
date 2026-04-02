@@ -1,5 +1,20 @@
+import "@/app/globals.css";
 import { createClient } from "@/lib/supabase/server";
 import Script from "next/script";
+import Image from "next/image";
+import Link from "next/link";
+import Header from "./components/header";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
+
+function FacebookIcon({ className }: { className?: string }) {
+  return <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>;
+}
+function InstagramIcon({ className }: { className?: string }) {
+  return <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>;
+}
+function YoutubeIcon({ className }: { className?: string }) {
+  return <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>;
+}
 
 export const revalidate = 60;
 
@@ -15,456 +30,219 @@ export default async function PublicLayout({
     .select("*")
     .single();
 
-  // Map DB fields to template fields
   const raw = settings ?? {};
   const s = {
-    address: raw.address_street ? `${raw.address_street} ${raw.address_city} ${raw.address_state} ${raw.address_zip}` : "1000 W. 94th St. Bloomington MN 55420",
-    address_short: raw.address_street ? `${raw.address_street} ${raw.address_city}` : "1000 W.94th St. Bloomington",
-    address_state_zip: raw.address_state ? `${raw.address_state} ${raw.address_zip}` : "MN 55420",
-    office_phone: raw.phone_office || "(952) 882 6182",
-    office_phone_raw: (raw.phone_office || "9528826182").replace(/\D/g, ""),
-    sales_phone: raw.phone_sales || "(612) 236 6190",
-    sales_phone_raw: (raw.phone_sales || "6122366190").replace(/\D/g, ""),
+    address_street: raw.address_street || "1000 W. 94th St",
+    address_city: raw.address_city || "Bloomington",
+    address_state: raw.address_state || "MN",
+    address_zip: raw.address_zip || "55420",
+    address_full: raw.address_street
+      ? `${raw.address_street}, ${raw.address_city}, ${raw.address_state} ${raw.address_zip}`
+      : "1000 W. 94th St, Bloomington, MN 55420",
+    phone_office: raw.phone_office || "(952) 882 6182",
+    phone_office_raw: (raw.phone_office || "9528826182").replace(/\D/g, ""),
+    phone_sales: raw.phone_sales || "(612) 236 6190",
+    phone_sales_raw: (raw.phone_sales || "6122366190").replace(/\D/g, ""),
     hours: raw.hours_display || "Always Open",
     facebook_url: raw.facebook_url || "https://m.facebook.com/GDLStoneSnow/?_rdr",
     instagram_url: raw.instagram_url || "https://instagram.com/gdlstonesnowllc",
     youtube_url: raw.youtube_url || "https://www.youtube.com/channel/UC4ingZfTXS1jpl1vKMjNVJw/videos",
-    site_name: raw.business_name || "GDL Stone Snow",
+    business_name: raw.business_name || "GDL Stone Snow LLC",
     email: raw.email || "camoren000@gmail.com",
-    google_maps_embed: raw.google_maps_embed || "",
-    logo_alt: "GDL Stone Snow LLC - Landscaping and Snow Removal Bloomington MN",
-    meta_title: "Landscaping & Snow Removal Bloomington MN | GDL Stone Snow",
     meta_description: raw.meta_description || "GDL Stone Snow LLC offers expert landscaping, masonry, lawn care & snow removal in Bloomington MN & the Twin Cities metro. Serving since 2003. Free estimates!",
-    meta_keywords: "landscaping Bloomington MN, snow removal Minneapolis, masonry contractor, lawn care Twin Cities, stone work Minnesota, ice control management",
   };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HomeAndConstructionBusiness",
+    name: s.business_name,
+    url: "https://gdlstonesnow.com/",
+    logo: "https://gdlstonesnow.com/images/logo.png",
+    image: "https://gdlstonesnow.com/images/logo.png",
+    description:
+      "Expert landscaping, masonry, lawn care and snow removal services in Bloomington MN and the Minneapolis-St. Paul metro area since 2003.",
+    telephone: s.phone_office,
+    email: s.email,
+    foundingDate: "2003",
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: s.address_street,
+      addressLocality: s.address_city,
+      addressRegion: s.address_state,
+      postalCode: s.address_zip,
+      addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 44.8408,
+      longitude: -93.2866,
+    },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday", "Tuesday", "Wednesday", "Thursday",
+        "Friday", "Saturday", "Sunday",
+      ],
+      opens: "00:00",
+      closes: "23:59",
+    },
+    areaServed: {
+      "@type": "GeoCircle",
+      geoMidpoint: {
+        "@type": "GeoCoordinates",
+        latitude: 44.9778,
+        longitude: -93.265,
+      },
+      geoRadius: "50000",
+      name: "Minneapolis-St. Paul Metro Area",
+    },
+    sameAs: [s.facebook_url, s.instagram_url, s.youtube_url].filter(Boolean),
+  };
+
+  const quickLinks = [
+    { href: "/", label: "Home" },
+    { href: "/services", label: "Services" },
+    { href: "/gallery", label: "Gallery" },
+    { href: "/promotions", label: "Promotions" },
+    { href: "/contact", label: "Contact" },
+  ];
 
   return (
     <>
       <head>
-        {/* Revolution Slider */}
-        <link rel="stylesheet" type="text/css" href="/rs-plugin/css/settings.css" />
-        {/* Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="//fonts.googleapis.com/css?family=Raleway:300,400,500&subset=latin-ext"
-          rel="stylesheet"
-          type="text/css"
-        />
-        <link
-          href="//fonts.googleapis.com/css?family=Lato:300,400,700,900&subset=latin-ext"
-          rel="stylesheet"
-          type="text/css"
-        />
-        {/* Stylesheets */}
-        <link rel="stylesheet" type="text/css" href="/style/reset.css" />
-        <link rel="stylesheet" type="text/css" href="/style/superfish.css" />
-        <link rel="stylesheet" type="text/css" href="/style/prettyPhoto.css" />
-        <link rel="stylesheet" type="text/css" href="/style/jquery.qtip.css" />
-        <link rel="stylesheet" type="text/css" href="/style/alerts.css" />
-        <link rel="stylesheet" type="text/css" href="/style/style.css" />
-        <link rel="stylesheet" type="text/css" href="/style/animations.css" />
-        <link rel="stylesheet" type="text/css" href="/style/responsive.css" />
-        <link rel="stylesheet" type="text/css" href="/style/odometer-theme-default.css" />
-        {/* Icon fonts */}
-        <link rel="stylesheet" type="text/css" href="/fonts/features/style.css" />
-        <link rel="stylesheet" type="text/css" href="/fonts/template/style.css" />
-        <link rel="stylesheet" type="text/css" href="/fonts/social/style.css" />
         <link rel="shortcut icon" href="/images/favicon.ico" />
-        {/* Structured data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "HomeAndConstructionBusiness",
-              name: s.site_name || "GDL Stone Snow LLC",
-              url: "https://gdlstonesnow.com/",
-              logo: "https://gdlstonesnow.com/images/logo.png",
-              image: "https://gdlstonesnow.com/images/logo.png",
-              description:
-                "Expert landscaping, masonry, lawn care and snow removal services in Bloomington MN and the Minneapolis-St. Paul metro area since 2003.",
-              telephone: s.office_phone,
-              foundingDate: "2003",
-              priceRange: "$$",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "1000 W. 94th St",
-                addressLocality: "Bloomington",
-                addressRegion: "MN",
-                postalCode: "55420",
-                addressCountry: "US",
-              },
-              geo: {
-                "@type": "GeoCoordinates",
-                latitude: 44.8408,
-                longitude: -93.2866,
-              },
-              openingHoursSpecification: {
-                "@type": "OpeningHoursSpecification",
-                dayOfWeek: [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                  "Saturday",
-                  "Sunday",
-                ],
-                opens: "00:00",
-                closes: "23:59",
-              },
-              areaServed: {
-                "@type": "GeoCircle",
-                geoMidpoint: {
-                  "@type": "GeoCoordinates",
-                  latitude: 44.9778,
-                  longitude: -93.265,
-                },
-                geoRadius: "50000",
-                name: "Minneapolis-St. Paul Metro Area",
-              },
-              sameAs: [
-                s.facebook_url,
-                s.instagram_url,
-                s.youtube_url,
-              ].filter(Boolean),
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Home",
-                  item: "https://gdlstonesnow.com/",
-                },
-              ],
-            }),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
 
-      <div className="site-container">
-        {/* Header Top Bar */}
-        <div className="header-top-bar-container clearfix">
-          <div className="header-top-bar">
-            <ul className="contact-details clearfix">
-              <li className="template-location">
-                {s.address}
-              </li>
-              <li className="features-phone">
-                Office
-                <a href={`tel:${s.office_phone_raw}`}>{s.office_phone} </a>
-              </li>
-              <li className="template-mobile">
-                Sales
-                <a href={`tel:${s.sales_phone_raw}`}>{s.sales_phone}</a>
-              </li>
-              <li className="template-clock">{s.hours}</li>
-            </ul>
-            <ul className="social-icons">
-              {s.facebook_url && (
-                <li>
-                  <a
-                    target="_blank"
-                    href={s.facebook_url}
-                    className="social-facebook"
-                    title="facebook"
-                    aria-label="Visit our Facebook page"
-                    rel="noopener"
-                  ></a>
-                </li>
-              )}
-              {s.instagram_url && (
-                <li>
-                  <a
-                    target="_blank"
-                    href={s.instagram_url}
-                    className="social-instagram"
-                    title="instagram"
-                    aria-label="Visit our Instagram profile"
-                    rel="noopener"
-                  ></a>
-                </li>
-              )}
-              {s.youtube_url && (
-                <li>
-                  <a
-                    target="_blank"
-                    href={s.youtube_url}
-                    className="social-youtube"
-                    title="youtube"
-                    aria-label="Visit our YouTube channel"
-                    rel="noopener"
-                  ></a>
-                </li>
-              )}
-            </ul>
-          </div>
-          <a href="#" className="header-toggle template-arrow-vertical-3" aria-label="Toggle header bar"></a>
-        </div>
+      <Header />
 
-        {/* Header */}
-        <div className="header-container sticky">
-          <div className="header clearfix">
-            <div className="menu-container first-menu clearfix">
-              <nav aria-label="Main navigation">
-                <ul className="sf-menu">
-                  <li>
-                    <a href="/" title="Home"> HOME </a>
-                  </li>
-                  <li>
-                    <a href="/services" title="Services"> SERVICES </a>
-                  </li>
-                  <li>
-                    <a href="/gallery" title="Gallery"> GALLERY </a>
-                  </li>
-                </ul>
-              </nav>
-              <div className="mobile-menu-container">
-                <nav aria-label="Mobile navigation">
-                  <ul className="mobile-menu collapsible-mobile-submenus">
-                    <li className="selected">
-                      <a className="template-arrow-vertical-3" href="#">&nbsp;</a>
-                    </li>
-                    <li>
-                      <a href="/" title="Home"> HOME </a>
-                    </li>
-                    <li>
-                      <a href="/services" title="Services"> SERVICES </a>
-                    </li>
-                    <li>
-                      <a href="/gallery" title="Gallery"> GALLERY </a>
-                    </li>
-                    <li>
-                      <a href="/promotions" title="Promotions"> PROMOTIONS </a>
-                    </li>
-                    <li>
-                      <a href="/contact" title="Contact"> CONTACT </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+      <main>{children}</main>
+
+      {/* Footer */}
+      <footer className="bg-[#1a1a1a] text-gray-300">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="grid gap-12 md:grid-cols-3">
+            {/* Col 1: Logo + Description */}
+            <div>
+              <Link href="/">
+                <Image
+                  src="/images/logo.png"
+                  alt={s.business_name}
+                  width={180}
+                  height={56}
+                  className="mb-4 h-14 w-auto"
+                />
+              </Link>
+              <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                {s.business_name} has been providing expert landscaping, masonry,
+                lawn care, and snow removal services to the Twin Cities metro area
+                since 2003. Quality workmanship and customer satisfaction are our
+                top priorities.
+              </p>
             </div>
-            <div className="logo">
-              <h1>
-                <a href="/" title={s.site_name}>
-                  <img
-                    src="/images/logo.png"
-                    srcSet="/images/logo.png 2x"
-                    className="primary-logo"
-                    alt={s.logo_alt}
-                  />
-                  <img
-                    src="/images/logo_transparent.png"
-                    srcSet="/images/logo_transparent.png 2x"
-                    className="secondary-logo"
-                    alt={s.logo_alt}
-                  />
-                  <span className="logo-text">{s.site_name}</span>
-                </a>
-              </h1>
-              <div className="logo-clone">
-                <h1>
-                  <a href="/" title={s.site_name}>
-                    <img
-                      src="/images/logo.png"
-                      srcSet="/images/logo.png 2x"
-                      className="primary-logo"
-                      alt={s.logo_alt}
-                    />
-                    <img
-                      src="/images/logo_transparent.png"
-                      srcSet="/images/logo_transparent.png 2x"
-                      className="secondary-logo"
-                      alt={s.logo_alt}
-                    />
-                    <span className="logo-text">{s.site_name}</span>
+
+            {/* Col 2: Quick Links */}
+            <div>
+              <h3 className="mb-4 text-lg font-semibold text-white">Quick Links</h3>
+              <ul className="space-y-2">
+                {quickLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-gray-400 transition-colors hover:text-[#8BB63A]"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Col 3: Contact Info + Social */}
+            <div>
+              <h3 className="mb-4 text-lg font-semibold text-white">Contact Info</h3>
+              <ul className="space-y-3 text-sm">
+                <li className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#8BB63A]" />
+                  <span>{s.address_full}</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#8BB63A]" />
+                  <div>
+                    <a href={`tel:${s.phone_office_raw}`} className="hover:text-[#8BB63A]">
+                      Office: {s.phone_office}
+                    </a>
+                    <br />
+                    <a href={`tel:${s.phone_sales_raw}`} className="hover:text-[#8BB63A]">
+                      Sales: {s.phone_sales}
+                    </a>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#8BB63A]" />
+                  <a href={`mailto:${s.email}`} className="hover:text-[#8BB63A]">
+                    {s.email}
                   </a>
-                </h1>
-              </div>
-            </div>
-            <a href="#" className="mobile-menu-switch" aria-label="Open mobile menu">
-              <span className="line"></span>
-              <span className="line"></span>
-              <span className="line"></span>
-              <span className="line"></span>
-            </a>
-            <div className="menu-container clearfix first-menu">
-              <nav aria-label="Secondary navigation">
-                <ul className="sf-menu">
-                  <li>
-                    <a href="/promotions" title="Promotions"> PROMOTIONS </a>
-                  </li>
-                  <li>
-                    <a href="/contact" title="Contact"> CONTACT </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#8BB63A]" />
+                  <span>{s.hours}</span>
+                </li>
+              </ul>
 
-      {/* Main Content */}
-      {children}
-
-      {/* Pre-Footer */}
-        <div className="row dark footer-row full-width padding-top-30">
-          <div className="row padding-bottom-33">
-            <div className="column column-1-3">
-              <ul className="contact-details-list">
-                <li className="features-phone">
-                  <label>CALL US TODAY</label>
-                  <p>
-                    <a href={`tel:${s.office_phone_raw}`}>{s.office_phone}</a>
-                  </p>
-                </li>
-              </ul>
-            </div>
-            <div className="column column-1-3">
-              <ul className="contact-details-list">
-                <li className="features-map">
-                  <label>{s.address_short}</label>
-                  <p>{s.address_state_zip}</p>
-                </li>
-              </ul>
-            </div>
-            <div className="column column-1-3">
-              <ul className="contact-details-list">
-                <li className="features-wallet">
-                  <label>CONTACT US</label>
-                  <p>
-                    <a href="/contact" title="Free Estimate">Get a free Estimate</a>
-                  </p>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="row dark-gray footer-row full-width padding-top-61 padding-bottom-36">
-          <div className="row row-3-4">
-            <div className="column column-1-2">
-              <div className="our-clients-list-container margin-top-40 type-list">
-                <ul className="our-clients-list type-list">
-                  <li className="vertical-align">
-                    <div className="our-clients-item-container">
-                      <div className="vertical-align-cell">
-                        <a>
-                          <img src="/images/logos/bbb.png" alt="Better Business Bureau member" loading="lazy" />
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="vertical-align">
-                    <div className="our-clients-item-container">
-                      <div className="vertical-align-cell">
-                        <a>
-                          <img src="/images/logos/nfib.jpg" alt="National Federation of Independent Business member" loading="lazy" />
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="vertical-align">
-                    <div className="our-clients-item-container">
-                      <div className="vertical-align-cell">
-                        <a>
-                          <img src="/images/logos/mnla.png" alt="Minnesota Nursery and Landscape Association member" loading="lazy" />
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="column column-1-2">
-              <h6>CONTACT INFO</h6>
-              <ul className="contact-data margin-top-20">
-                <li className="template-location">
-                  <div className="value">{s.address}</div>
-                </li>
-                <li className="template-mobile">
-                  <div className="value">
-                    <a href={`tel:${s.office_phone_raw}`}>Office {s.office_phone}</a>
-                  </div>
-                </li>
-                <li className="template-mobile">
-                  <div className="value">
-                    <a href={`tel:${s.sales_phone_raw}`}>Sales {s.sales_phone}</a>
-                  </div>
-                </li>
-                <li className="template-clock">
-                  <div className="value">{s.hours}</div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="row page-padding-top">
-            <ul className="social-icons align-center">
-              {s.facebook_url && (
-                <li>
+              {/* Social Icons */}
+              <div className="mt-6 flex gap-4">
+                {s.facebook_url && (
                   <a
-                    target="_blank"
                     href={s.facebook_url}
-                    className="social-facebook"
-                    title="facebook"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Visit our Facebook page"
-                    rel="noopener"
-                  ></a>
-                </li>
-              )}
-              {s.instagram_url && (
-                <li>
+                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white"
+                  >
+                    <FacebookIcon className="h-5 w-5" />
+                  </a>
+                )}
+                {s.instagram_url && (
                   <a
-                    target="_blank"
                     href={s.instagram_url}
-                    className="social-instagram"
-                    title="instagram"
-                    aria-label="Visit our Instagram profile"
-                    rel="noopener"
-                  ></a>
-                </li>
-              )}
-              {s.youtube_url && (
-                <li>
-                  <a
                     target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit our Instagram profile"
+                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white"
+                  >
+                    <InstagramIcon className="h-5 w-5" />
+                  </a>
+                )}
+                {s.youtube_url && (
+                  <a
                     href={s.youtube_url}
-                    className="social-youtube"
-                    title="youtube"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Visit our YouTube channel"
-                    rel="noopener"
-                  ></a>
-                </li>
-              )}
-            </ul>
-          </div>
-          <div className="row align-center padding-top-30">
-            <span className="copyright">
-              &copy; Copyright {new Date().getFullYear()}{" "}
-              <a href="" title="" target="_blank">Powered</a> by{" "}
-              <a href="http://datelica.com" title="Datelica" target="_blank">
-                Datelica
-              </a>
-            </span>
+                    className="rounded-full bg-gray-800 p-2 text-gray-400 transition-colors hover:bg-[#8BB63A] hover:text-white"
+                  >
+                    <YoutubeIcon className="h-5 w-5" />
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-      <a
-        href="#top"
-        className="scroll-top animated-element template-arrow-vertical-3"
-        title="Scroll to top"
-      ></a>
-      <div className="background-overlay"></div>
+        {/* Copyright Row */}
+        <div className="border-t border-gray-800">
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <p className="text-center text-sm text-gray-500">
+              &copy; {new Date().getFullYear()} {s.business_name}. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
 
       {/* Google Analytics */}
       <Script
@@ -479,31 +257,6 @@ export default async function PublicLayout({
           gtag('config', 'G-3W3QSQZ30N');
         `}
       </Script>
-
-      {/* JS Dependencies */}
-      <Script src="/js/jquery-1.12.4.min.js" strategy="beforeInteractive" />
-      <Script src="/js/jquery-migrate-1.4.1.min.js" strategy="beforeInteractive" />
-      {/* Revolution Slider */}
-      <Script src="/rs-plugin/js/jquery.themepunch.tools.min.js" strategy="afterInteractive" />
-      <Script src="/rs-plugin/js/jquery.themepunch.revolution.min.js" strategy="afterInteractive" />
-      {/* jQuery Plugins */}
-      <Script src="/js/jquery.ba-bbq.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery-ui-1.12.1.custom.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.ui.touch-punch.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.easing.1.3.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.carouFredSel-6.2.1-packed.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.touchSwipe.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.transit.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.timeago.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.hint.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.costCalculator.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.parallax.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.prettyPhoto.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.qtip.min.js" strategy="afterInteractive" />
-      <Script src="/js/jquery.blockUI.min.js" strategy="afterInteractive" />
-      <Script src="/js/main.js" strategy="afterInteractive" />
-      <Script src="/js/custom.js" strategy="afterInteractive" />
-      <Script src="/js/odometer.min.js" strategy="afterInteractive" />
     </>
   );
 }

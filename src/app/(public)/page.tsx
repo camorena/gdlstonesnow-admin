@@ -1,4 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
+import Image from "next/image";
+import Link from "next/link";
+import AnimatedSection from "./components/animated-section";
+import { Quote } from "lucide-react";
 
 export const revalidate = 60;
 
@@ -20,10 +24,7 @@ export default async function HomePage() {
       .from("services")
       .select("*, service_items(*)")
       .order("sort_order", { ascending: true }),
-    supabase
-      .from("content_blocks")
-      .select("*")
-      .eq("page", "home"),
+    supabase.from("content_blocks").select("*").eq("page", "home"),
     supabase
       .from("testimonials")
       .select("*")
@@ -32,335 +33,234 @@ export default async function HomePage() {
       .from("gallery_items")
       .select("*")
       .order("sort_order", { ascending: true })
-      .limit(3),
+      .limit(4),
   ]);
 
-  // Helper to find a content block by slug
   const block = (slug: string) =>
     contentBlocks?.find((b: { slug: string }) => b.slug === slug);
 
-  const servicesIntro = block("services-intro");
-  const reasonsToChoose = block("reasons-to-choose");
   const aboutCompany = block("about-company");
-  const ourMission = block("our-mission");
-  const ourServicesSection = block("our-services");
-  const wantToTalk = block("want-to-talk");
-  const statsSection = block("stats");
 
-  // Fallback slides if DB is empty
-  const displaySlides = slides && slides.length > 0 ? slides : [
-    {
-      image_url: "/images/slider/slider-1-1.jpg",
-      image_alt: "Professional landscape maintenance services in Bloomington MN",
-      subtitle: "Complete grounds maintenance services to suit any budget.",
-      title_line1: "Landscape",
-      title_line2: "Maintenance Service",
-      cta_text: "GET A NO OBLIGATION QUOTE TODAY!",
-      cta_url: "/contact",
-    },
-    {
-      image_url: "/images/slider/slider-1-1.jpg",
-      image_alt: "Lawn care and grounds maintenance by GDL Stone Snow",
-      subtitle: "Lawn care Maintenance",
-      title_line1: "CONTINUOUS PURSUIT",
-      title_line2: "FOR PERFECTION",
-      cta_text: "GET A FREE ESTIMATE!",
-      cta_url: "/contact",
-    },
-    {
-      image_url: "/images/slider/slider-1-3.jpg",
-      image_alt: "Winter snow removal and ice control services in Minneapolis-St. Paul",
-      subtitle: "Discover what we can do",
-      title_line1: "WINTER SERVICES",
-      title_line2: "TO KEEP YOU UP & RUNNING",
-      cta_text: "CONTACT US!",
-      cta_url: "/contact",
-    },
-  ];
+  // Hero background from first slide or fallback
+  const heroImage =
+    slides && slides.length > 0
+      ? slides[0].image_url
+      : "/images/slider/slider-1-1.jpg";
 
   // Fallback testimonials
-  const displayTestimonials = testimonials && testimonials.length > 0 ? testimonials : [
-    {
-      body: "GDL Stone Snow did a terrific job. They build a beautiful monument in the backyard - they really paid attention to detail. Thank you!",
-      author: "STACEY, EDINA",
-    },
-    {
-      body: "We would like to thank GDL Stone Snow for an outstanding effort on this recently completed project located in Minnetonka. The project involved a very aggressive schedule and it was completed on time.",
-      author: "MARK, MINNETONKA",
-    },
+  const displayTestimonials =
+    testimonials && testimonials.length > 0
+      ? testimonials
+      : [
+          {
+            id: "fallback-1",
+            body: "GDL Stone Snow did a terrific job. They built a beautiful monument in the backyard - they really paid attention to detail. Thank you!",
+            author: "Stacey",
+            location: "Edina, MN",
+          },
+          {
+            id: "fallback-2",
+            body: "We would like to thank GDL Stone Snow for an outstanding effort on this recently completed project. The project involved a very aggressive schedule and it was completed on time.",
+            author: "Mark",
+            location: "Minnetonka, MN",
+          },
+        ];
+
+  // Fallback gallery items
+  const displayGallery =
+    galleryItems && galleryItems.length > 0
+      ? galleryItems
+      : [
+          { id: "g1", image_url: "/images/pages/480x320/landscape.jpg", title: "Landscape Design" },
+          { id: "g2", image_url: "/images/pages/480x320/lawncare-services.jpg", title: "Lawn Care" },
+          { id: "g3", image_url: "/images/pages/480x320/snow-removal-services.jpg", title: "Snow Removal" },
+          { id: "g4", image_url: "/images/pages/480x320/about-1.jpg", title: "Masonry Work" },
+        ];
+
+  // Fallback services
+  const displayServices =
+    services && services.length > 0
+      ? services
+      : [
+          {
+            id: "s1",
+            title: "Landscape",
+            image_url: "/images/pages/480x320/landscape.jpg",
+            image_alt: "Professional landscape design",
+            description: "Expert landscape design and installation throughout the Twin Cities.",
+            service_items: [],
+          },
+          {
+            id: "s2",
+            title: "Lawn Care",
+            image_url: "/images/pages/480x320/lawncare-services.jpg",
+            image_alt: "Lawn care services",
+            description: "Complete lawn care for commercial and residential properties.",
+            service_items: [],
+          },
+          {
+            id: "s3",
+            title: "Snow Removal",
+            image_url: "/images/pages/480x320/snow-removal-services.jpg",
+            image_alt: "Snow removal services",
+            description: "Reliable snow and ice removal customized to fit your needs.",
+            service_items: [],
+          },
+        ];
+
+  const stats = [
+    { value: "23+", label: "Years Experience" },
+    { value: "500+", label: "Projects Completed" },
+    { value: "24/7", label: "Emergency Service" },
+    { value: "100%", label: "Customer Satisfaction" },
   ];
 
   return (
     <>
-      {/* Revolution Slider */}
-      <div className="revolution-slider-container">
-        <div
-          className="revolution-slider"
-          data-version="5.4.5"
-          style={{ display: "none" }}
-        >
-          <ul>
-            {displaySlides.map((slide: Record<string, string>, index: number) => (
-              <li
-                key={index}
-                data-transition="fade"
-                data-masterspeed="500"
-                data-slotamount="1"
-                data-delay="6000"
-              >
-                {/* MAIN IMAGE */}
-                <img
-                  src={slide.image_url}
-                  alt={slide.image_alt || ""}
-                  data-bgfit="cover"
-                />
-                {/* LAYER 01 */}
-                <div
-                  className={`tp-caption${index > 0 ? " customin customout" : ""}`}
-                  data-frames='[{"delay":500,"speed":1500,"from":"y:-40;o:0;","ease":"easeInOutExpo"},{"delay":"wait","speed":500,"to":"o:0;","ease":"easeInOutExpo"}]'
-                  data-x="center"
-                  data-y="['211', '197', '120', '148']"
-                >
-                  <h4>{slide.subtitle}</h4>
-                </div>
-                {/* LAYER 02 */}
-                <div
-                  className={`tp-caption${index > 0 ? " customin customout" : ""}`}
-                  data-frames='[{"delay":900,"speed":2000,"from":"y:40;o:0;","ease":"easeInOutExpo"},{"delay":"wait","speed":500,"to":"o:0;","ease":"easeInOutExpo"}]'
-                  data-x="center"
-                  data-y="['273', '253', '160', '190']"
-                >
-                  <h2 className="slider-subtitle">
-                    <strong>{slide.title_line1}</strong>
-                  </h2>
-                </div>
-                {/* LAYER 03 */}
-                <div
-                  className={`tp-caption${index > 0 ? " customin customout" : ""}`}
-                  data-frames='[{"delay":1100,"speed":2000,"from":"y:40;o:0;","ease":"easeInOutExpo"},{"delay":"wait","speed":500,"to":"o:0;","ease":"easeInOutExpo"}]'
-                  data-x="center"
-                  data-y="['345', '308', '196', '220']"
-                >
-                  <h2 className="slider-subtitle">
-                    <strong>{slide.title_line2}</strong>
-                  </h2>
-                </div>
-                {/* LAYER 04 */}
-                <div
-                  className={`tp-caption${index > 0 ? " customin customout" : ""}`}
-                  data-frames='[{"delay":1500,"speed":1500,"from":"y:40;o:0;","ease":"easeInOutExpo"},{"delay":"wait","speed":500,"to":"o:0;","ease":"easeInOutExpo"}]'
-                  data-x="center"
-                  data-y="['476', '418', '264', '283']"
-                >
-                  <div className="align-center">
-                    <a className="more" href={slide.cta_url || "/contact"} title="Quote">
-                      {slide.cta_text}
-                    </a>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+      {/* ========== HERO SECTION ========== */}
+      <section className="relative flex h-screen items-center justify-center overflow-hidden">
+        <Image
+          src={heroImage}
+          alt="Professional landscaping and snow removal services"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/60" />
+        <AnimatedSection className="relative z-10 mx-auto max-w-4xl px-4 text-center">
+          <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+            Professional Landscaping &amp; Snow Removal
+          </h1>
+          <p className="mt-4 text-lg text-gray-200 sm:text-xl">
+            Serving the Twin Cities Since 2003
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/contact"
+              className="rounded-md bg-[#8BB63A] px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-[#7aa832]"
+            >
+              Get Free Estimate
+            </Link>
+            <Link
+              href="/services"
+              className="rounded-md border-2 border-white px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-white hover:text-[#1a1a1a]"
+            >
+              Our Services
+            </Link>
+          </div>
+        </AnimatedSection>
+      </section>
+
+      {/* ========== SERVICES SECTION ========== */}
+      <section className="bg-gray-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center">
+            <h2 className="text-3xl font-bold text-[#1a1a1a] sm:text-4xl">
+              Our Services
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-gray-600">
+              We provide exceptional services to a wide range of commercial and
+              residential customers
+            </p>
+          </AnimatedSection>
+
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {displayServices.map(
+              (
+                service: {
+                  id: string;
+                  title: string;
+                  image_url: string;
+                  image_alt?: string;
+                  description?: string;
+                  service_items?: { id: string }[];
+                },
+                index: number
+              ) => (
+                <AnimatedSection key={service.id} delay={index * 0.1}>
+                  <Link
+                    href="/services"
+                    className="group block overflow-hidden rounded-xl bg-white shadow-md transition-all hover:-translate-y-1 hover:shadow-xl"
+                  >
+                    <div className="relative aspect-[3/2] overflow-hidden">
+                      <Image
+                        src={service.image_url}
+                        alt={service.image_alt || service.title}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {service.service_items &&
+                        service.service_items.length > 0 && (
+                          <span className="absolute right-3 top-3 rounded-full bg-[#8BB63A] px-3 py-1 text-xs font-semibold text-white">
+                            {service.service_items.length} services
+                          </span>
+                        )}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-xl font-semibold text-[#1a1a1a]">
+                        {service.title}
+                      </h3>
+                      {service.description && (
+                        <p className="mt-2 line-clamp-3 text-sm text-gray-600">
+                          {service.description}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                </AnimatedSection>
+              )
+            )}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Main Content */}
-      <div className="theme-page">
-        <div className="clearfix">
-          {/* Services Cards */}
-          <div className="row margin-top-89">
-            <div className="row">
-              <h2 className="box-header">
-                {servicesIntro?.title || "OUR SERVICES"}
-              </h2>
-              <p className="description align-center">
-                {servicesIntro?.subtitle ||
-                  "We provide exceptional services to a wide range of commercial and residential customers"}
-              </p>
-              <div className="carousel-container margin-top-65 clearfix">
-                <ul className="services-list horizontal-carousel clearfix page-margin-top">
-                  {services && services.length > 0 ? (
-                    services.slice(0, 3).map(
-                      (
-                        service: {
-                          id: string;
-                          slug: string;
-                          title: string;
-                          image_url: string;
-                          image_alt: string;
-                          description: string;
-                        },
-                        index: number
-                      ) => (
-                        <li className="column column-1-3" key={service.id || index}>
-                          <a href="/services" title={`${service.title} Services`}>
-                            <img
-                              src={service.image_url}
-                              alt={service.image_alt || service.title}
-                              loading="lazy"
-                            />
-                          </a>
-                          <h4 className="box-header">
-                            <a href="/services" title={`${service.title} Services`}>
-                              {service.title}
-                            </a>
-                          </h4>
-                          <p>{service.description}</p>
-                        </li>
-                      )
-                    )
-                  ) : (
-                    <>
-                      <li className="column column-1-3">
-                        <a href="/services" title="Landscape Services">
-                          <img
-                            src="/images/pages/480x320/landscape.jpg"
-                            alt="Professional landscape design services in the Twin Cities"
-                            loading="lazy"
-                          />
-                        </a>
-                        <h4 className="box-header">
-                          <a href="/services" title="Landscape Services">LANDSCAPE</a>
-                        </h4>
-                        <p>
-                          We take pride in providing top notch service along with
-                          industry leading principles and procedures in landscape
-                          design.GDL has been in the Ladscape Industry since 2003
-                          creating and mastering landscape designs throughout the Twin
-                          Cities.
-                        </p>
-                      </li>
-                      <li className="column column-1-3">
-                        <a href="/services" title="Lawncare Services">
-                          <img
-                            src="/images/pages/480x320/lawncare-services.jpg"
-                            alt="Commercial and residential lawn care services in Bloomington MN"
-                            loading="lazy"
-                          />
-                        </a>
-                        <h4 className="box-header">
-                          <a href="/services" title="Lawncare Services">LAWN CARE</a>
-                        </h4>
-                        <p>
-                          We provide lawn care services to a wide range of commercial
-                          and residential properties. Our company delivers its promise
-                          to you, our client, and values your business. The needs of
-                          your business remain our top focus for the entire period of
-                          service
-                        </p>
-                      </li>
-                      <li className="column column-1-3">
-                        <a href="/services" title="Snow Removal Services">
-                          <img
-                            src="/images/pages/480x320/snow-removal-services.jpg"
-                            alt="Snow removal and ice management services in Minneapolis-St. Paul"
-                            loading="lazy"
-                          />
-                        </a>
-                        <h4 className="box-header">
-                          <a href="/services" title="Snow Removal Services">
-                            SNOW REMOVAL
-                          </a>
-                        </h4>
-                        <p>
-                          Snow and ice removal services can be customized to fit your
-                          need. We have the equipment to accommodate any residential or
-                          commercial request, while providing the best possible
-                          solution.
-                        </p>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
-            </div>
+      {/* ========== STATS BAR ========== */}
+      <section className="bg-[#8BB63A] py-14">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            {stats.map((stat, index) => (
+              <AnimatedSection key={stat.label} delay={index * 0.1} className="text-center">
+                <p className="text-4xl font-bold text-white sm:text-5xl">
+                  {stat.value}
+                </p>
+                <p className="mt-2 text-sm font-medium text-white/90 sm:text-base">
+                  {stat.label}
+                </p>
+              </AnimatedSection>
+            ))}
           </div>
+        </div>
+      </section>
 
-          {/* Reasons to Choose Us */}
-          <div className="row full-width gray flex-box page-margin-top-section">
-            <div className="column column-1-2 background-1">
-              <a className="flex-hide" href="/about" title="About">
-                <img
-                  src={reasonsToChoose?.image_url || "/images/pages/960x750/ourservices-1.jpg"}
-                  alt={reasonsToChoose?.image_alt || "GDL Stone Snow landscaping and grounds maintenance work"}
+      {/* ========== ABOUT SECTION ========== */}
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <AnimatedSection>
+              <div className="relative aspect-[480/693] overflow-hidden rounded-xl">
+                <Image
+                  src="/images/pages/480x693/ourcompany.jpg"
+                  alt="GDL Stone Snow company landscaping project"
+                  fill
+                  className="object-cover"
                 />
-              </a>
-            </div>
-            <div className="column column-1-2 padding-bottom-96">
-              <div className="row padding-left-right-100">
-                <h2 className="box-header align-left margin-top-89">
-                  {reasonsToChoose?.title || "REASONS TO CHOOSE US"}
-                </h2>
-                {reasonsToChoose?.body ? (
-                  <div dangerouslySetInnerHTML={{ __html: reasonsToChoose.body }} />
-                ) : (
-                  <>
-                    <p className="description">
-                      GDL has been in the Landscape Industry since 2003 creating and
-                      mastering landscape designs throughout the Twin Cities. We take
-                      pride in providing top notch service along with industry leading
-                      principles and procedures in landscape design.
-                    </p>
-                    <div className="row page-margin-top">
-                      <ol className="features-list">
-                        <li className="column column-1-2">
-                          <span className="list-number">1</span>
-                          <h4>SERVICES</h4>
-                          <p>
-                            Professional Landscape and Snow management services. Our
-                            company has many years of experience and our customer
-                            focused approach makes the difference.
-                          </p>
-                        </li>
-                        <li className="column column-1-2">
-                          <span className="list-number">2</span>
-                          <h4>CREATING DREAMS</h4>
-                          <p>
-                            Our experienced crews set the standard by creating elegant
-                            landscape designs and making dreams come true.
-                          </p>
-                        </li>
-                      </ol>
-                    </div>
-                    <div className="row page-margin-top">
-                      <ol className="features-list">
-                        <li className="column column-1-2">
-                          <span className="list-number">3</span>
-                          <h4>SNOW PROS</h4>
-                          <p>Leading the industry on snow removal.</p>
-                        </li>
-                        <li className="column column-1-2">
-                          <span className="list-number">4</span>
-                          <h4>MASTER GARDENER</h4>
-                          <p>
-                            Dedicated floral designer to create and design flower bed
-                            and seasonal poting arrangements.
-                          </p>
-                        </li>
-                      </ol>
-                    </div>
-                  </>
-                )}
               </div>
-            </div>
-          </div>
+            </AnimatedSection>
 
-          {/* About Our Company */}
-          <div className="row page-margin-top-section padding-bottom-100">
-            <div className="column column-1-2">
-              <h2 className="box-header">
-                {aboutCompany?.title || "ABOUT OUR COMPANY"}
+            <AnimatedSection delay={0.2}>
+              <h2 className="text-3xl font-bold text-[#1a1a1a] sm:text-4xl">
+                {aboutCompany?.title || "About Our Company"}
               </h2>
-              <p className="description align-center">
+              <p className="mt-2 text-lg text-[#8BB63A]">
                 {aboutCompany?.subtitle || "Exceptional level of service."}
               </p>
               {aboutCompany?.body ? (
                 <div
-                  className="align-center padding-0 margin-top-27 padding-left-right-35"
+                  className="mt-6 space-y-4 leading-relaxed text-gray-600"
                   dangerouslySetInnerHTML={{ __html: aboutCompany.body }}
                 />
               ) : (
-                <p className="align-center padding-0 margin-top-27 padding-left-right-35">
+                <p className="mt-6 leading-relaxed text-gray-600">
                   GDL has been in the Landscape Industry since 2003, creating and
                   mastering landscape designs throughout the Twin Cities. We take
                   pride in providing top notch service along with industry leading
@@ -370,175 +270,135 @@ export default async function HomePage() {
                   the entire period of service.
                 </p>
               )}
-              <div className="align-center page-margin-top padding-bottom-16">
-                <a className="more" href="/contact" title="Learn more">
-                  Learn more
-                </a>
-              </div>
-            </div>
-            <div className="column column-1-4">
-              <div className="row">
-                <a
-                  href="/images/pages/480x693/ourcompany.jpg"
-                  className="prettyPhoto cm-preload"
-                  title="Our Company"
-                >
-                  <img
-                    src="/images/pages/480x693/ourcompany.jpg"
-                    alt="GDL Stone Snow company landscaping project"
-                  />
-                </a>
-              </div>
-              <div className="row margin-top-30">
-                <a
-                  href="/images/pages/480x320/about-1.jpg"
-                  className="prettyPhoto cm-preload"
-                  title="Our Company"
-                >
-                  <img
-                    src="/images/pages/480x320/about-1.jpg"
-                    alt="Masonry and stone work by GDL Stone Snow"
-                  />
-                </a>
-              </div>
-            </div>
-            <div className="column column-1-4">
-              <div className="row">
-                <a
-                  href="/images/pages/480x320/about-2.jpg"
-                  className="prettyPhoto cm-preload"
-                  title="Our Company"
-                >
-                  <img
-                    src="/images/pages/480x320/about-2.jpg"
-                    alt="Outdoor living space design and installation"
-                  />
-                </a>
-              </div>
-              <div className="row margin-top-30">
-                <a
-                  href="/images/pages/480x320/about-3.jpg"
-                  className="prettyPhoto cm-preload"
-                  title="Our Company"
-                >
-                  <img
-                    src="/images/pages/480x320/about-3.jpg"
-                    alt="Professional grounds maintenance and garden design"
-                  />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Our Services / Our Mission / Want to Talk */}
-          <div className="row full-width gray flex-box">
-            <div className="column column-1-3 padding-bottom-96">
-              <div className="row padding-left-right-70 margin-top-89">
-                <h4>{ourMission?.title || "OUR MISSION IS TO:"}</h4>
-                {ourMission?.body ? (
-                  <div
-                    className="margin-top-20"
-                    dangerouslySetInnerHTML={{ __html: ourMission.body }}
-                  />
-                ) : (
-                  <ul className="list margin-top-20">
-                    <li className="template-tick-1">
-                      Offer a different kind of services to families and Business
-                    </li>
-                    <li className="template-tick-1">
-                      Deliver high quality and consistent services
-                    </li>
-                    <li className="template-tick-1">
-                      Use friendly environmental products
-                    </li>
-                    <li className="template-tick-1">
-                      Provide stable jobs with reasonable wages
-                    </li>
-                    <li className="template-tick-1">
-                      Concentrate our resources on maintaining standards
-                    </li>
-                    <li className="template-tick-1">
-                      Make you an extremely satisfied customer
-                    </li>
-                  </ul>
-                )}
-              </div>
-            </div>
-            <div className="column column-1-3 background-3">
-              <a className="flex-hide" href="/contact" title="Our Mission">
-                <img
-                  src={ourMission?.image_url || "/images/pages/960x750/ourmission.jpg"}
-                  alt={ourMission?.image_alt || "GDL Stone Snow team completing a landscaping project"}
-                />
-              </a>
-            </div>
-            <div className="column column-1-3 padding-bottom-100">
-              <div className="row padding-left-right-70 margin-top-89">
-                <h2 className="font-weight-300">
-                  {wantToTalk?.title || "Want to talk?"}
-                </h2>
-                {wantToTalk?.body ? (
-                  <div dangerouslySetInnerHTML={{ __html: wantToTalk.body }} />
-                ) : (
-                  <>
-                    <h2>
-                      Please call now:{" "}
-                      <a href="tel:9528826182">(952) 882 6182</a>
-                    </h2>
-                    <p className="description margin-top-20">
-                      Need a special service? We are happy to fulfill every request
-                      in order to exceed your expectations.
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Free Estimate CTA */}
-          <div className="row full-width padding-top-59 padding-bottom-60 align-center">
-            <h3>
-              <span className="button-label">DO YOU LIKE WHAT YOU SEE?</span>
-              <a className="more" href="/contact" title="Get a free Estimate">
-                Get a free Estimate
-              </a>
-            </h3>
-          </div>
-
-          {/* Testimonials */}
-          <div className="row full-width padding-top-112 padding-bottom-115 parallax parallax-3 overlay">
-            <div className="row testimonials-container">
-              <a
-                href="#"
-                className="slider-control left template-arrow-horizontal-3"
-                aria-label="Previous testimonial"
-              ></a>
-              <ul className="testimonials-list testimonials-carousel">
-                {displayTestimonials.map(
-                  (
-                    testimonial: { id?: string; body: string; author: string; title?: string },
-                    index: number
-                  ) => (
-                    <li key={testimonial.id || index}>
-                      <div className="testimonials-icon template-quote"></div>
-                      <p>{testimonial.body}</p>
-                      <h6>{testimonial.author}</h6>
-                      {testimonial.title && (
-                        <div className="author-details">{testimonial.title}</div>
-                      )}
-                    </li>
-                  )
-                )}
-              </ul>
-              <a
-                href="#"
-                className="slider-control right template-arrow-horizontal-3"
-                aria-label="Next testimonial"
-              ></a>
-            </div>
+              <Link
+                href="/contact"
+                className="mt-8 inline-block rounded-md bg-[#8BB63A] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#7aa832]"
+              >
+                Learn More
+              </Link>
+            </AnimatedSection>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* ========== GALLERY PREVIEW ========== */}
+      <section className="bg-gray-50 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center">
+            <h2 className="text-3xl font-bold text-[#1a1a1a] sm:text-4xl">
+              Our Work
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-gray-600">
+              Browse some of our recent projects
+            </p>
+          </AnimatedSection>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {displayGallery.map(
+              (
+                item: {
+                  id: string;
+                  image_url: string;
+                  title?: string;
+                  image_alt?: string;
+                },
+                index: number
+              ) => (
+                <AnimatedSection key={item.id} delay={index * 0.1}>
+                  <div className="group relative aspect-square overflow-hidden rounded-xl">
+                    <Image
+                      src={item.image_url}
+                      alt={item.image_alt || item.title || "Gallery image"}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+                      <p className="p-4 text-sm font-medium text-white">
+                        {item.title || "Project"}
+                      </p>
+                    </div>
+                  </div>
+                </AnimatedSection>
+              )
+            )}
+          </div>
+
+          <AnimatedSection className="mt-10 text-center">
+            <Link
+              href="/gallery"
+              className="inline-block rounded-md border-2 border-[#8BB63A] px-8 py-3 font-semibold text-[#8BB63A] transition-colors hover:bg-[#8BB63A] hover:text-white"
+            >
+              View All Projects
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ========== TESTIMONIALS ========== */}
+      <section className="bg-gray-100 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center">
+            <h2 className="text-3xl font-bold text-[#1a1a1a] sm:text-4xl">
+              What Our Clients Say
+            </h2>
+          </AnimatedSection>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {displayTestimonials.map(
+              (
+                testimonial: {
+                  id?: string;
+                  body: string;
+                  author: string;
+                  location?: string;
+                  title?: string;
+                },
+                index: number
+              ) => (
+                <AnimatedSection key={testimonial.id || index} delay={index * 0.1}>
+                  <div className="flex h-full flex-col rounded-xl bg-white p-6 shadow-md">
+                    <Quote className="mb-4 h-8 w-8 text-[#8BB63A]" />
+                    <p className="flex-1 text-gray-600 italic leading-relaxed">
+                      &ldquo;{testimonial.body}&rdquo;
+                    </p>
+                    <div className="mt-6 border-t border-gray-100 pt-4">
+                      <p className="font-semibold text-[#1a1a1a]">
+                        {testimonial.author}
+                      </p>
+                      {(testimonial.location || testimonial.title) && (
+                        <p className="text-sm text-gray-500">
+                          {testimonial.location || testimonial.title}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </AnimatedSection>
+              )
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ========== CTA BANNER ========== */}
+      <section className="bg-[#8BB63A] py-20">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <h2 className="text-3xl font-bold text-white sm:text-4xl">
+              Ready to Transform Your Property?
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-white/90">
+              Get in touch with our team for a free, no-obligation estimate. We
+              are here to bring your vision to life.
+            </p>
+            <Link
+              href="/contact"
+              className="mt-8 inline-block rounded-md bg-white px-8 py-3 text-lg font-semibold text-[#8BB63A] transition-colors hover:bg-gray-100"
+            >
+              Contact Us
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
     </>
   );
 }

@@ -24,6 +24,7 @@ export default function ContactForm() {
     name?: string;
   } | null>(null);
   const [emailjsReady, setEmailjsReady] = useState(false);
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (result) {
@@ -32,41 +33,47 @@ export default function ContactForm() {
         if (formRef.current) {
           formRef.current.reset();
         }
-      }, 8000);
+      }, 10000);
       return () => clearTimeout(timer);
     }
   }, [result]);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function validate(): boolean {
     const form = formRef.current;
-    if (!form) return;
+    if (!form) return false;
 
-    let isValid = true;
-    const inputs = form.querySelectorAll<
-      HTMLInputElement | HTMLTextAreaElement
-    >("input[required], textarea[required]");
+    const newErrors: Record<string, boolean> = {};
+    let valid = true;
 
-    inputs.forEach((field) => {
-      field.style.backgroundColor = "";
-      if (!field.value.trim()) {
-        field.style.backgroundColor = "#FFDEDE";
-        isValid = false;
+    const requiredFields = ["name", "email", "phone", "address", "city", "zipcode", "message"];
+    requiredFields.forEach((fieldName) => {
+      const el = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+        `[name="${fieldName}"]`
+      );
+      if (el && !el.value.trim()) {
+        newErrors[fieldName] = true;
+        valid = false;
       }
     });
 
-    const emailField = form.querySelector<HTMLInputElement>(
-      'input[type="email"]'
-    );
-    if (
-      emailField &&
-      !/^[\w.-]+@[\w-]+\.[\w-]{2,}$/.test(emailField.value.trim())
-    ) {
-      emailField.style.backgroundColor = "#FFDEDE";
-      isValid = false;
+    const emailField = form.querySelector<HTMLInputElement>('[name="email"]');
+    if (emailField && emailField.value.trim()) {
+      if (!/^[\w.-]+@[\w-]+\.[\w-]{2,}$/.test(emailField.value.trim())) {
+        newErrors["email"] = true;
+        valid = false;
+      }
     }
 
-    if (!isValid) return;
+    setErrors(newErrors);
+    return valid;
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const form = formRef.current;
+    if (!form) return;
 
     setSending(true);
 
@@ -91,6 +98,7 @@ export default function ContactForm() {
         () => {
           setResult({ type: "success", name: params.name });
           setSending(false);
+          setErrors({});
         },
         () => {
           setResult({ type: "error" });
@@ -99,12 +107,12 @@ export default function ContactForm() {
       );
   }
 
-  const successBg = "#e8f5e9";
-  const successBorder = "#8BB63A";
-  const successTitleColor = "#2e7d32";
-  const errorBg = "#fbe9e7";
-  const errorBorder = "#d32f2f";
-  const errorTitleColor = "#c62828";
+  const inputClass = (field: string) =>
+    `w-full px-4 py-3 rounded-lg border ${
+      errors[field]
+        ? "border-red-400 bg-red-50 focus:ring-red-400"
+        : "border-gray-300 bg-white focus:ring-[#8BB63A]"
+    } focus:outline-none focus:ring-2 focus:border-transparent transition-colors text-[#1a1a1a] placeholder-gray-400`;
 
   return (
     <>
@@ -116,157 +124,294 @@ export default function ContactForm() {
           setEmailjsReady(true);
         }}
       />
-      {result?.type !== "success" && (
-        <form
-          className="contact-form"
-          id="contact-form"
-          ref={formRef}
-          onSubmit={handleSubmit}
-        >
-          <div className="row flex-box">
-            <fieldset className="column column-1-2">
-              <label htmlFor="contact-name">NAME</label>
-              <input
-                className="text-input"
-                id="contact-name"
-                name="name"
-                type="text"
-                placeholder="Your full name"
-                required
-              />
-              <label htmlFor="contact-email">EMAIL</label>
-              <input
-                className="text-input"
-                id="contact-email"
-                name="email"
-                type="email"
-                placeholder="your@email.com"
-                required
-              />
-              <label htmlFor="contact-phone">PHONE NUMBER</label>
-              <input
-                className="text-input"
-                id="contact-phone"
-                name="phone"
-                type="tel"
-                placeholder="(555) 123-4567"
-                required
-              />
-              <label htmlFor="contact-address">ADDRESS</label>
-              <input
-                className="text-input"
-                id="contact-address"
-                name="address"
-                type="text"
-                placeholder="Street address"
-                required
-              />
-              <label htmlFor="contact-city">CITY</label>
-              <input
-                className="text-input"
-                id="contact-city"
-                name="city"
-                type="text"
-                placeholder="City"
-                required
-              />
-              <label htmlFor="contact-zipcode">ZIP CODE</label>
-              <input
-                className="text-input"
-                id="contact-zipcode"
-                name="zipcode"
-                type="text"
-                placeholder="55420"
-                pattern="[0-9]{5}"
-                maxLength={5}
-                required
-              />
-            </fieldset>
-            <fieldset className="column column-1-2">
-              <label htmlFor="contact-message">MESSAGE</label>
-              <textarea
-                id="contact-message"
-                name="message"
-                placeholder="How can we help you?"
-                required
-              ></textarea>
-            </fieldset>
-          </div>
-          <div className="row margin-top-30 margin-bottom-30">
-            <div className="column column-1-1">
-              <div className="row contact-form-submit margin-top-15 padding-bottom-16 align-center">
-                <button
-                  type="submit"
-                  id="submit_btn"
-                  className="more"
-                  disabled={sending}
-                  style={{
-                    cursor: "pointer",
-                    border: "none",
-                    fontFamily: "'Raleway','Arial',sans-serif",
-                  }}
+
+      <div className="bg-white rounded-2xl shadow-md p-8">
+        <h2 className="text-2xl font-bold text-[#1a1a1a] mb-6">
+          Send Us a Message
+        </h2>
+
+        {/* Success Banner */}
+        {result?.type === "success" && (
+          <div className="mb-6 rounded-xl bg-green-50 border-2 border-[#8BB63A] p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-[#8BB63A] flex items-center justify-center flex-shrink-0">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {sending ? "Sending..." : "Send message"}
-                </button>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-green-800">
+                  We&apos;ve Received Your Request
+                </h3>
+                <p className="text-green-700 mt-2 leading-relaxed">
+                  Thank you, <strong>{result.name}</strong>. Our team is
+                  reviewing your inquiry and will reach out to you within one
+                  business day to discuss your project.
+                </p>
+                <p className="text-green-700 mt-2 text-sm">
+                  For immediate assistance, call us at{" "}
+                  <a
+                    href="tel:9528826182"
+                    className="font-bold text-[#8BB63A] hover:underline"
+                  >
+                    (952) 882-6182
+                  </a>
+                  .
+                </p>
               </div>
             </div>
           </div>
-        </form>
-      )}
-      {result && (
-        <div
-          id="contact_results"
-          style={{
-            textAlign: "center",
-            padding: "30px 20px",
-            marginTop: "20px",
-            borderRadius: "6px",
-            backgroundColor:
-              result.type === "success" ? successBg : errorBg,
-            border: `2px solid ${result.type === "success" ? successBorder : errorBorder}`,
-          }}
-        >
-          <div className="inner">
-            <div
-              id="result-icon"
-              style={{ fontSize: "48px", marginBottom: "15px" }}
-              dangerouslySetInnerHTML={{
-                __html: result.type === "success" ? "&#10004;" : "&#10006;",
-              }}
-            />
-            <h4
-              id="result-title"
-              style={{
-                margin: "0 0 10px",
-                fontSize: "20px",
-                color:
-                  result.type === "success"
-                    ? successTitleColor
-                    : errorTitleColor,
-              }}
-            >
-              {result.type === "success"
-                ? "We've Received Your Request"
-                : "Unable to Submit Your Request"}
-            </h4>
-            <p
-              id="result-message"
-              style={{
-                margin: 0,
-                fontSize: "15px",
-                lineHeight: 1.5,
-                color: "#555",
-              }}
-              dangerouslySetInnerHTML={{
-                __html:
-                  result.type === "success"
-                    ? `Thank you, <strong>${result.name}</strong>. Our team is reviewing your inquiry and will reach out to you within one business day to discuss your project.<br><br>For immediate assistance, call us at <a href='tel:9528826182' style='color:#8BB63A;font-weight:bold;'>(952) 882-6182</a>.`
-                    : `We apologize for the inconvenience. Please try again in a moment or reach us directly at <a href='tel:9528826182' style='color:#8BB63A;font-weight:bold;'>(952) 882-6182</a> or <a href='mailto:camoren000@gmail.com' style='color:#8BB63A;font-weight:bold;'>camoren000@gmail.com</a>.`,
-              }}
-            />
+        )}
+
+        {/* Error Banner */}
+        {result?.type === "error" && (
+          <div className="mb-6 rounded-xl bg-red-50 border-2 border-red-400 p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0">
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-red-800">
+                  Unable to Submit Your Request
+                </h3>
+                <p className="text-red-700 mt-2 leading-relaxed">
+                  We apologize for the inconvenience. Please try again in a
+                  moment or reach us directly at{" "}
+                  <a
+                    href="tel:9528826182"
+                    className="font-bold text-[#8BB63A] hover:underline"
+                  >
+                    (952) 882-6182
+                  </a>{" "}
+                  or{" "}
+                  <a
+                    href="mailto:camoren000@gmail.com"
+                    className="font-bold text-[#8BB63A] hover:underline"
+                  >
+                    camoren000@gmail.com
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Form */}
+        {result?.type !== "success" && (
+          <form ref={formRef} onSubmit={handleSubmit} noValidate>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {/* Name */}
+              <div>
+                <label
+                  htmlFor="contact-name"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
+                  Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  placeholder="Your full name"
+                  required
+                  className={inputClass("name")}
+                  onChange={() =>
+                    errors.name && setErrors((e) => ({ ...e, name: false }))
+                  }
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label
+                  htmlFor="contact-email"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
+                  Email <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  required
+                  className={inputClass("email")}
+                  onChange={() =>
+                    errors.email && setErrors((e) => ({ ...e, email: false }))
+                  }
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label
+                  htmlFor="contact-phone"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
+                  Phone <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="contact-phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="(555) 123-4567"
+                  required
+                  className={inputClass("phone")}
+                  onChange={() =>
+                    errors.phone && setErrors((e) => ({ ...e, phone: false }))
+                  }
+                />
+              </div>
+
+              {/* Address */}
+              <div>
+                <label
+                  htmlFor="contact-address"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
+                  Address <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="contact-address"
+                  name="address"
+                  type="text"
+                  placeholder="Street address"
+                  required
+                  className={inputClass("address")}
+                  onChange={() =>
+                    errors.address &&
+                    setErrors((e) => ({ ...e, address: false }))
+                  }
+                />
+              </div>
+
+              {/* City */}
+              <div>
+                <label
+                  htmlFor="contact-city"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
+                  City <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="contact-city"
+                  name="city"
+                  type="text"
+                  placeholder="City"
+                  required
+                  className={inputClass("city")}
+                  onChange={() =>
+                    errors.city && setErrors((e) => ({ ...e, city: false }))
+                  }
+                />
+              </div>
+
+              {/* Zip Code */}
+              <div>
+                <label
+                  htmlFor="contact-zipcode"
+                  className="block text-sm font-semibold text-gray-700 mb-1.5"
+                >
+                  Zip Code <span className="text-red-400">*</span>
+                </label>
+                <input
+                  id="contact-zipcode"
+                  name="zipcode"
+                  type="text"
+                  placeholder="55420"
+                  pattern="[0-9]{5}"
+                  maxLength={5}
+                  required
+                  className={inputClass("zipcode")}
+                  onChange={() =>
+                    errors.zipcode &&
+                    setErrors((e) => ({ ...e, zipcode: false }))
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Message */}
+            <div className="mt-5">
+              <label
+                htmlFor="contact-message"
+                className="block text-sm font-semibold text-gray-700 mb-1.5"
+              >
+                Message <span className="text-red-400">*</span>
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                placeholder="How can we help you? Tell us about your project..."
+                required
+                rows={6}
+                className={inputClass("message")}
+                onChange={() =>
+                  errors.message &&
+                  setErrors((e) => ({ ...e, message: false }))
+                }
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={sending}
+              className="mt-6 w-full py-4 px-6 rounded-lg bg-[#8BB63A] hover:bg-[#7aa832] text-white font-bold text-lg transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
+            >
+              {sending ? (
+                <>
+                  <svg
+                    className="animate-spin w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Sending...
+                </>
+              ) : (
+                "Send Message"
+              )}
+            </button>
+          </form>
+        )}
+      </div>
     </>
   );
 }
