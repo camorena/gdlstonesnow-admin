@@ -83,7 +83,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
       title: item.title ?? "",
       alt_text: item.alt_text ?? "",
       category: item.category ?? "general",
-      url: item.url,
+      url: (item as Record<string, unknown>).image_url as string || item.url,
     });
     setSelectedFile(null);
     setModal({ kind: "edit", item });
@@ -154,9 +154,8 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
           ? Math.max(...items.map((i) => i.sort_order))
           : -1;
 
-        const newItem: GalleryItemInsert = {
-          type: "image",
-          url: imageUrl,
+        const newItem = {
+          image_url: imageUrl,
           thumbnail_url: imageUrl,
           title: form.title || null,
           alt_text: form.alt_text || null,
@@ -167,7 +166,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
 
         const { data, error } = await supabase
           .from("gallery_items")
-          .insert(newItem)
+          .insert(newItem as Record<string, unknown>)
           .select()
           .single();
 
@@ -199,9 +198,8 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
           ? Math.max(...items.map((i) => i.sort_order))
           : -1;
 
-        const newItem: GalleryItemInsert = {
-          type: "video",
-          url: videoUrl,
+        const newItem = {
+          image_url: videoUrl,
           thumbnail_url: thumbnail,
           title: form.title || null,
           alt_text: form.alt_text || null,
@@ -212,7 +210,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
 
         const { data, error } = await supabase
           .from("gallery_items")
-          .insert(newItem)
+          .insert(newItem as Record<string, unknown>)
           .select()
           .single();
 
@@ -231,19 +229,19 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
           url = await uploadFile(selectedFile);
           thumbnailUrl = url;
           setUploading(false);
-        } else if (editItem.type === "video") {
+        } else if (isVideoItem(editItem)) {
           thumbnailUrl = extractYouTubeThumbnail(form.url) ?? editItem.thumbnail_url;
         }
 
         const { data, error } = await supabase
           .from("gallery_items")
           .update({
-            url,
+            image_url: url,
             thumbnail_url: thumbnailUrl,
             title: form.title || null,
             alt_text: form.alt_text || null,
             category: form.category || null,
-          })
+          } as Record<string, unknown>)
           .eq("id", editItem.id)
           .select()
           .single();
