@@ -9,9 +9,36 @@ import Hero from "@/app/(public)/components/hero";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Seasonal Promotions | GDL Stone Snow Bloomington MN",
+  title: "Landscaping Deals & Seasonal Specials",
   description:
-    "Take advantage of seasonal offers on landscaping, stone work, and snow removal services from GDL Stone Snow LLC in Bloomington MN.",
+    "Save on landscaping deals in Bloomington MN. Seasonal lawn care specials, snow removal discounts & masonry promotions from GDL Stone Snow LLC.",
+  openGraph: {
+    title: "Landscaping Deals & Seasonal Specials | GDL Stone Snow LLC",
+    description:
+      "Save on landscaping deals in Bloomington MN. Seasonal lawn care specials, snow removal discounts & masonry promotions from GDL Stone Snow LLC.",
+    url: "https://gdlstonesnow.com/promotions",
+    siteName: "GDL Stone Snow LLC",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 800,
+        height: 600,
+        alt: "GDL Stone Snow LLC seasonal promotions in Bloomington MN",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Landscaping Deals & Seasonal Specials | GDL Stone Snow LLC",
+    description:
+      "Save on landscaping deals in Bloomington MN. Seasonal lawn care specials, snow removal discounts & masonry promotions.",
+    images: ["/images/logo.png"],
+  },
+  alternates: {
+    canonical: "https://gdlstonesnow.com/promotions",
+  },
 };
 
 type PromotionWithItems = Promotion & {
@@ -74,11 +101,34 @@ export default async function PromotionsPage() {
   const heroGradient =
     seasonStyles[currentSeason]?.gradient ?? seasonStyles.spring.gradient;
 
+  const promotionsJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: "Seasonal Landscaping & Snow Removal Promotions - GDL Stone Snow LLC",
+    description: "Limited-time deals on landscaping, lawn care, masonry, and snow removal services in Bloomington MN and the Twin Cities metro area.",
+    url: "https://gdlstonesnow.com/promotions",
+    provider: {
+      "@type": "HomeAndConstructionBusiness",
+      "@id": "https://gdlstonesnow.com/#business",
+      name: "GDL Stone Snow LLC",
+    },
+    itemListElement: sortedPromotions.map((promo, index) => ({
+      "@type": "Offer",
+      name: promo.title,
+      position: index + 1,
+      ...(promo.season ? { category: promo.season } : {}),
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#111111]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(promotionsJsonLd) }}
+      />
       <Hero
         title="Seasonal Promotions"
-        subtitle="Take advantage of our seasonal offers on landscaping, stone work, and snow removal services"
+        subtitle="Limited-time savings on the services your property needs most — don't miss out"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Promotions" }]}
         backgroundImage="/images/pages/480x320/promotions-1.jpg"
         size="large"
@@ -104,7 +154,9 @@ export default async function PromotionsPage() {
               </svg>
             </div>
             <p className="text-lg text-gray-500 dark:text-gray-400">
-              No active promotions at this time. Check back soon!
+              We&apos;re preparing new seasonal offers — check back soon or{" "}
+              <a href="/contact" className="font-semibold text-[#8BB63A] hover:underline">contact us</a>{" "}
+              for current pricing.
             </p>
           </div>
         ) : (
@@ -221,6 +273,34 @@ export default async function PromotionsPage() {
           </div>
         )}
       </div>
+
+      {/* Internal links to Services and Contact */}
+      <AnimatedSection>
+        <section className="bg-white dark:bg-[#0f0f0f] py-16">
+          <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold tracking-tight text-[#1a1a1a] dark:text-white md:text-4xl">
+              Take Advantage of These Offers
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-300">
+              Learn more about our <Link href="/services" className="font-semibold text-[#8BB63A] hover:underline">full range of landscaping and snow removal services</Link>, or <Link href="/contact" className="font-semibold text-[#8BB63A] hover:underline">contact us today</Link> to claim your seasonal discount.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 rounded-full bg-[#8BB63A] px-8 py-4 font-semibold text-white shadow-lg shadow-[#8BB63A]/25 transition-all duration-300 hover:bg-[#7aa132] hover:shadow-xl"
+              >
+                Claim Your Discount
+              </Link>
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-[#8BB63A] px-8 py-4 font-semibold text-[#8BB63A] transition-all duration-300 hover:bg-[#8BB63A] hover:text-white"
+              >
+                Explore Services
+              </Link>
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
 
       {/* Inline keyframes for pulse-glow animation */}
       <style

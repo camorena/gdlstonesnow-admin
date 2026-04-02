@@ -1,0 +1,32 @@
+/* TEAM */
+
+Owner: Fernando Floersch
+Role: Founder & Owner
+Location: Bloomington, MN
+Since: 2003
+
+/* COMPANY */
+
+Name: GDL Stone Snow LLC
+Founded: 2003
+Location: 1000 W. 94th St, Bloomington, MN 55420
+Office: (952) 882-6182
+Sales: (612) 236-6190
+Website: https://gdlstonesnow.com
+
+/* TECHNOLOGY */
+
+Framework: Next.js (React)
+Language: TypeScript
+Styling: Tailwind CSS
+Database: Supabase (PostgreSQL)
+Hosting: Vercel
+Analytics: Google Analytics
+Maps: Google Maps Embed API
+
+/* SITE */
+
+Last updated: 2026-03-30
+Standards: HTML5, CSS3, ES6+
+Components: Server Components, Client Components
+Software: Visual Studio Code, Git

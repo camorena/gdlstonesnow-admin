@@ -46,7 +46,7 @@ export default function GalleryClient({ items }: GalleryClientProps) {
   return (
     <>
       {/* Premium Filter Bar */}
-      <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-3 px-4 sm:px-6 lg:px-8">
+      <div role="group" aria-label="Filter gallery by category" className="mx-auto flex max-w-7xl flex-wrap justify-center gap-3 px-4 sm:px-6 lg:px-8">
         {FILTER_TABS.map((tab) => (
           <button
             key={tab.value}
@@ -54,6 +54,8 @@ export default function GalleryClient({ items }: GalleryClientProps) {
               setActiveFilter(tab.value);
               setLightboxIndex(null);
             }}
+            aria-label={`Filter by ${tab.label}`}
+            aria-pressed={activeFilter === tab.value}
             className={`rounded-full px-7 py-2.5 text-sm font-semibold transition-all duration-300 ${
               activeFilter === tab.value
                 ? "bg-[#8BB63A] text-white shadow-lg shadow-[#8BB63A]/25"
@@ -84,11 +86,12 @@ export default function GalleryClient({ items }: GalleryClientProps) {
               >
                 <button
                   onClick={() => openLightbox(index)}
+                  aria-label={`View ${item.title || "project"} - ${item.category || "landscaping"} in the Twin Cities`}
                   className="group relative w-full overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8BB63A] focus-visible:ring-offset-2"
                 >
                   <Image
                     src={item.thumbnail_url ?? item.url}
-                    alt={item.alt_text ?? item.title ?? "Gallery image"}
+                    alt={item.alt_text ?? `${item.title || "Project"} by GDL Stone Snow in Bloomington MN`}
                     width={600}
                     height={item.type === "video" ? 338 : 450}
                     className="w-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -159,7 +162,7 @@ export default function GalleryClient({ items }: GalleryClientProps) {
             </svg>
           </div>
           <p className="text-lg text-gray-500 dark:text-gray-400">
-            No items found in this category.
+            No projects in this category yet — check back soon or browse another category.
           </p>
         </div>
       )}

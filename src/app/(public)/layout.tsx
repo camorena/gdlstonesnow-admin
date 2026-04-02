@@ -55,6 +55,7 @@ export default async function PublicLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "HomeAndConstructionBusiness",
+    "@id": "https://gdlstonesnow.com/#business",
     name: s.business_name,
     url: "https://gdlstonesnow.com/",
     logo: "https://gdlstonesnow.com/images/logo.png",
@@ -87,15 +88,28 @@ export default async function PublicLayout({
       opens: "00:00",
       closes: "23:59",
     },
-    areaServed: {
-      "@type": "GeoCircle",
-      geoMidpoint: {
-        "@type": "GeoCoordinates",
-        latitude: 44.9778,
-        longitude: -93.265,
-      },
-      geoRadius: "50000",
-      name: "Minneapolis-St. Paul Metro Area",
+    areaServed: [
+      { "@type": "City", name: "Bloomington", sameAs: "https://en.wikipedia.org/wiki/Bloomington,_Minnesota" },
+      { "@type": "City", name: "Minneapolis", sameAs: "https://en.wikipedia.org/wiki/Minneapolis" },
+      { "@type": "City", name: "St. Paul", sameAs: "https://en.wikipedia.org/wiki/Saint_Paul,_Minnesota" },
+      { "@type": "City", name: "Edina" },
+      { "@type": "City", name: "Richfield" },
+      { "@type": "City", name: "Burnsville" },
+      { "@type": "City", name: "Eagan" },
+      { "@type": "City", name: "Eden Prairie" },
+      { "@type": "City", name: "Minnetonka" },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Landscaping & Snow Removal Services",
+      itemListElement: [
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Landscaping" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Lawn Care" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Masonry & Stone Work" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Irrigation" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Snow Removal" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Ice Management" } },
+      ],
     },
     sameAs: [s.facebook_url, s.instagram_url, s.youtube_url].filter(Boolean),
   };
@@ -112,6 +126,8 @@ export default async function PublicLayout({
     <>
       <head>
         <link rel="shortcut icon" href="/images/favicon.ico" />
+        <meta name="ai-content-declaration" content="This website contains information about GDL Stone Snow LLC, a landscaping, masonry, and snow removal company in Bloomington, Minnesota. Founded in 2003 by Fernando Floersch. Serving the Minneapolis-St. Paul metro area. Office: (952) 882-6182. Services include landscaping, lawn care, masonry, stone work, irrigation, snow removal, and ice management." />
+        <link rel="author" href="/humans.txt" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -131,22 +147,22 @@ export default async function PublicLayout({
               <Link href="/">
                 <Image
                   src="/images/logo.png"
-                  alt={s.business_name}
+                  alt={`${s.business_name} - Landscaping and Snow Removal in Bloomington MN`}
                   width={180}
                   height={56}
                   className="mb-4 h-14 w-auto"
                 />
               </Link>
               <p className="mt-4 text-sm leading-relaxed text-gray-400 dark:text-gray-500">
-                {s.business_name} has been providing expert landscaping, masonry,
-                lawn care, and snow removal services to the Twin Cities metro area
-                since 2003. Quality workmanship and customer satisfaction are our
-                top priorities.
+                Locally owned and operated since 2003, {s.business_name} delivers
+                dependable landscaping, masonry, and snow removal to homes and
+                businesses across the Minneapolis-St. Paul metro. Licensed, insured,
+                and built on 23+ years of trust.
               </p>
             </div>
 
             {/* Col 2: Quick Links */}
-            <div>
+            <nav aria-label="Footer navigation">
               <h3 className="mb-4 text-lg font-semibold text-white dark:text-gray-100">Quick Links</h3>
               <ul className="space-y-2">
                 {quickLinks.map((link) => (
@@ -160,7 +176,7 @@ export default async function PublicLayout({
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
 
             {/* Col 3: Contact Info + Social */}
             <div>
@@ -238,7 +254,7 @@ export default async function PublicLayout({
         <div className="border-t border-gray-800 dark:border-gray-800/60">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <p className="text-center text-sm text-gray-500 dark:text-gray-600">
-              &copy; {new Date().getFullYear()} {s.business_name}. All rights reserved.
+              &copy; {new Date().getFullYear()} {s.business_name}. All rights reserved. Bloomington, MN.
             </p>
           </div>
         </div>

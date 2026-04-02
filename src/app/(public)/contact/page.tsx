@@ -9,9 +9,36 @@ import Hero from "@/app/(public)/components/hero";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Contact Us | GDL Stone Snow Bloomington MN",
+  title: "Free Estimate | Contact Us Bloomington MN",
   description:
-    "Get in touch with GDL Stone Snow LLC for a free estimate. Landscaping, masonry, stone work, and snow removal in Bloomington and the Twin Cities metro.",
+    "Get a free landscaping estimate in Bloomington MN. Contact GDL Stone Snow LLC for lawn care, masonry, stone work & snow removal. Call (952) 882-6182.",
+  openGraph: {
+    title: "Free Estimate | Contact GDL Stone Snow LLC Bloomington MN",
+    description:
+      "Get a free landscaping estimate in Bloomington MN. Contact GDL Stone Snow LLC for lawn care, masonry, stone work & snow removal. Call (952) 882-6182.",
+    url: "https://gdlstonesnow.com/contact",
+    siteName: "GDL Stone Snow LLC",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 800,
+        height: 600,
+        alt: "Contact GDL Stone Snow LLC in Bloomington MN",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Estimate | Contact GDL Stone Snow LLC Bloomington MN",
+    description:
+      "Get a free landscaping estimate in Bloomington MN. Contact GDL Stone Snow LLC for lawn care, masonry, stone work & snow removal.",
+    images: ["/images/logo.png"],
+  },
+  alternates: {
+    canonical: "https://gdlstonesnow.com/contact",
+  },
 };
 
 export default async function ContactPage() {
@@ -45,11 +72,38 @@ export default async function ContactPage() {
     ? `${settings.address_street}, ${settings.address_city}, ${settings.address_state} ${settings.address_zip}`
     : "";
 
+  const contactJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact GDL Stone Snow LLC",
+    description: "Get a free estimate for landscaping, masonry, lawn care, and snow removal services in Bloomington MN and the Twin Cities metro area.",
+    url: "https://gdlstonesnow.com/contact",
+    mainEntity: {
+      "@type": "HomeAndConstructionBusiness",
+      "@id": "https://gdlstonesnow.com/#business",
+      name: "GDL Stone Snow LLC",
+      telephone: settings?.phone_office || "(952) 882-6182",
+      email: settings?.email || "camoren000@gmail.com",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: settings?.address_street || "1000 W. 94th St",
+        addressLocality: settings?.address_city || "Bloomington",
+        addressRegion: settings?.address_state || "MN",
+        postalCode: settings?.address_zip || "55420",
+        addressCountry: "US",
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#111111]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
+      />
       <Hero
         title="Get In Touch"
-        subtitle="We'd love to hear about your next project. Reach out for a free estimate."
+        subtitle="Whether you need a new patio, fresh landscaping, or reliable snow removal — we're here to help. Free estimates, always."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
         backgroundImage="/images/slider/slider-1-1.jpg"
         size="large"
@@ -70,7 +124,7 @@ export default async function ContactPage() {
                 Contact Information
               </h2>
               <p className="mt-2 text-sm text-gray-400">
-                Feel free to reach out through any of these channels.
+                Reach out anytime — we typically respond within one business day.
               </p>
 
               <div className="mt-8 space-y-7">
@@ -127,7 +181,7 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Office Phone
+                        Office
                       </p>
                       <a
                         href={`tel:${settings.phone_office.replace(/\D/g, "")}`}
@@ -159,7 +213,7 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Sales Phone
+                        Sales & Estimates
                       </p>
                       <a
                         href={`tel:${settings.phone_sales.replace(/\D/g, "")}`}
@@ -223,7 +277,7 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        Hours
+                        Business Hours
                       </p>
                       <p className="mt-1 whitespace-pre-line text-white">
                         {settings.hours_display}
@@ -367,6 +421,13 @@ export default async function ContactPage() {
                 </li>
               ))}
             </ul>
+          </AnimatedSection>
+
+          {/* Internal link to Services */}
+          <AnimatedSection delay={300} className="mt-12">
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Not sure which service you need? <Link href="/services" className="font-semibold text-[#8BB63A] hover:underline">Explore our full range of landscaping, masonry, and snow removal services</Link> to find the right fit for your property.
+            </p>
           </AnimatedSection>
         </div>
       </div>

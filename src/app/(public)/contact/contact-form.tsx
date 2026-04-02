@@ -130,7 +130,7 @@ export default function ContactForm() {
         {/* Title with green underline */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-[#1a1a1a] dark:text-white">
-            Send Us a Message
+            Tell Us About Your Project
           </h2>
           <div className="mt-2 h-1 w-16 rounded-full bg-[#8BB63A]" />
         </div>
@@ -172,14 +172,14 @@ export default function ContactForm() {
               </svg>
             </div>
             <h3 className="text-2xl font-bold text-[#1a1a1a] dark:text-white">
-              Message Sent!
+              Thank You, {result.name}!
             </h3>
             <p className="mt-3 max-w-md leading-relaxed text-gray-600 dark:text-gray-300">
-              Thank you, <strong>{result.name}</strong>. Our team will review
-              your inquiry and reach out within one business day.
+              We received your message and a member of our team will get back to
+              you within one business day with your free estimate.
             </p>
             <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-              For immediate assistance, call{" "}
+              Need a faster response? Call us directly at{" "}
               <a
                 href="tel:9528826182"
                 className="font-semibold text-[#8BB63A] hover:underline"
@@ -224,10 +224,10 @@ export default function ContactForm() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-red-800 dark:text-red-300">
-                  Unable to Send Message
+                  We Couldn&apos;t Send Your Message
                 </h3>
                 <p className="mt-2 leading-relaxed text-red-700 dark:text-red-400">
-                  Something went wrong. Please try again or contact us directly
+                  Don&apos;t worry — you can try again below, or reach us directly
                   at{" "}
                   <a
                     href="tel:9528826182"
@@ -490,7 +490,7 @@ export default function ContactForm() {
                 </>
               ) : (
                 <>
-                  Send Message
+                  Send My Request
                   <svg
                     className="h-5 w-5"
                     fill="none"

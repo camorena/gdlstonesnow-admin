@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "./components/animated-section";
@@ -7,6 +8,41 @@ import TestimonialCarousel from "./components/testimonial-carousel";
 import Hero from "./components/hero";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "GDL Stone Snow LLC | Landscaping & Snow Removal Bloomington MN",
+  },
+  description:
+    "Top-rated landscaping, lawn care, masonry & snow removal in Bloomington MN and the Twin Cities. Trusted since 2003. Call (952) 882-6182 for a free estimate.",
+  openGraph: {
+    title: "GDL Stone Snow LLC | Landscaping & Snow Removal Bloomington MN",
+    description:
+      "Top-rated landscaping, lawn care, masonry & snow removal in Bloomington MN and the Twin Cities. Trusted since 2003. Call (952) 882-6182 for a free estimate.",
+    url: "https://gdlstonesnow.com/",
+    siteName: "GDL Stone Snow LLC",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 800,
+        height: 600,
+        alt: "GDL Stone Snow LLC - Landscaping and Snow Removal in Bloomington MN",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GDL Stone Snow LLC | Landscaping & Snow Removal Bloomington MN",
+    description:
+      "Top-rated landscaping, lawn care, masonry & snow removal in Bloomington MN and the Twin Cities. Trusted since 2003.",
+    images: ["/images/logo.png"],
+  },
+  alternates: {
+    canonical: "https://gdlstonesnow.com/",
+  },
+};
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -150,32 +186,100 @@ export default async function HomePage() {
     "Minnetonka",
   ];
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "What areas does GDL Stone Snow serve?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "GDL Stone Snow LLC serves the entire Minneapolis-St. Paul metro area including Bloomington, Minneapolis, St. Paul, Edina, Richfield, Burnsville, Eagan, Eden Prairie, Minnetonka, and surrounding communities.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What landscaping services does GDL Stone Snow offer?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "GDL Stone Snow offers comprehensive landscaping services including landscape design and installation, garden design, planting, hardscaping, retaining walls, outdoor living spaces, drainage solutions, and seasonal cleanups for both residential and commercial properties.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Does GDL Stone Snow offer snow removal services?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, GDL Stone Snow provides 24/7 snow removal and ice management services including plowing, shoveling, snow hauling, salt and sand application, liquid de-icer treatments, and anti-icing programs for commercial and residential properties.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do I get a free estimate from GDL Stone Snow?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "You can request a free estimate by calling our office at (952) 882-6182, calling our sales line at (612) 236-6190, emailing camoren000@gmail.com, or filling out the contact form on our website at gdlstonesnow.com/contact. Most quotes are delivered within 24 hours.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How long has GDL Stone Snow been in business?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "GDL Stone Snow LLC was founded in 2003 by Fernando Floersch. The company has over 23 years of experience providing landscaping, masonry, and snow removal services in the Twin Cities metro area.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Does GDL Stone Snow serve commercial properties?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, GDL Stone Snow serves both residential and commercial properties. The company has worked with large corporations including Pinnacle Properties, Caspian Group, Sherman & Associates, Walser Corporation, and RMK Management.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What is GDL Stone Snow's phone number?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "GDL Stone Snow LLC's office phone number is (952) 882-6182. For sales inquiries, you can call (612) 236-6190. The company is available 24/7 for emergency snow and ice services.",
+        },
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       {/* ========== HERO SECTION ========== */}
       <Hero
-        title="Professional Landscaping & Snow Removal"
-        subtitle="Expert landscaping, masonry, stone work, and snow removal services serving the Twin Cities since 2003"
+        title="Your Property Deserves the Best Care"
+        subtitle="Trusted by Twin Cities homeowners and businesses for over 23 years — landscaping, masonry, stone work, and snow removal done right"
         backgroundImage={heroImage}
         size="full"
         overlay="gradient"
       >
         <div className="flex flex-col items-center">
           <span className="mb-6 inline-block rounded-full bg-[#8BB63A]/20 px-5 py-2 text-sm font-semibold tracking-wide text-[#8BB63A] backdrop-blur-sm ring-1 ring-[#8BB63A]/30">
-            Serving the Twin Cities Since 2003
+            Trusted Since 2003 — Licensed & Insured
           </span>
           <div className="mt-4 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/contact"
               className="rounded-full bg-[#8BB63A] px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-[#8BB63A]/25 transition-all duration-300 hover:bg-[#7aa132] hover:shadow-xl hover:shadow-[#8BB63A]/30"
             >
-              Get Free Estimate
+              Get Your Free Estimate
             </Link>
             <Link
               href="/gallery"
               className="rounded-full border border-white/30 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20"
             >
-              View Our Work
+              See Our Projects
             </Link>
           </div>
         </div>
@@ -207,11 +311,11 @@ export default async function HomePage() {
       <section className="bg-white dark:bg-[#0f0f0f] py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#8BB63A]">
               What We Do
             </p>
             <h2 className="mt-3 text-4xl font-bold text-[#1a1a1a] dark:text-white sm:text-5xl">
-              Our Services
+              Solutions for Every Season
             </h2>
           </AnimatedSection>
 
@@ -240,7 +344,7 @@ export default async function HomePage() {
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <Image
                         src={service.image_url}
-                        alt={service.image_alt || service.title}
+                        alt={service.image_alt || `${service.title} service in Bloomington MN by GDL Stone Snow`}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -276,7 +380,7 @@ export default async function HomePage() {
               href="/services"
               className="inline-block rounded-full border-2 border-[#8BB63A] px-8 py-4 font-semibold text-[#8BB63A] transition-all duration-300 hover:bg-[#8BB63A] hover:text-white hover:shadow-lg hover:shadow-[#8BB63A]/20"
             >
-              View All Services
+              Explore All Services
             </Link>
           </AnimatedSection>
         </div>
@@ -291,7 +395,7 @@ export default async function HomePage() {
                 <AnimatedCounter end={23} suffix="+" duration={2} />
               </p>
               <p className="mt-3 text-sm font-medium tracking-wide text-white/90 sm:text-base">
-                Years of Experience
+                Years Serving the Twin Cities
               </p>
             </AnimatedSection>
 
@@ -300,14 +404,14 @@ export default async function HomePage() {
                 <AnimatedCounter end={500} suffix="+" duration={2.5} />
               </p>
               <p className="mt-3 text-sm font-medium tracking-wide text-white/90 sm:text-base">
-                Projects Completed
+                Happy Clients & Projects
               </p>
             </AnimatedSection>
 
             <AnimatedSection delay={300} className="text-center">
               <p className="text-5xl font-bold text-white sm:text-6xl">24/7</p>
               <p className="mt-3 text-sm font-medium tracking-wide text-white/90 sm:text-base">
-                Emergency Service
+                Snow & Ice Response
               </p>
             </AnimatedSection>
 
@@ -316,7 +420,7 @@ export default async function HomePage() {
                 <AnimatedCounter end={100} suffix="%" duration={2} />
               </p>
               <p className="mt-3 text-sm font-medium tracking-wide text-white/90 sm:text-base">
-                Customer Satisfaction
+                Satisfaction Guaranteed
               </p>
             </AnimatedSection>
           </div>
@@ -335,7 +439,7 @@ export default async function HomePage() {
                   <div className="relative aspect-[480/693]">
                     <Image
                       src="/images/pages/480x693/ourcompany.jpg"
-                      alt="GDL Stone Snow company landscaping project"
+                      alt="GDL Stone Snow LLC landscaping and masonry project in Bloomington MN"
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 50vw"
@@ -346,13 +450,13 @@ export default async function HomePage() {
             </AnimatedSection>
 
             <AnimatedSection direction="right" delay={200}>
-              <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
+              <p className="text-sm font-semibold uppercase tracking-widest text-[#8BB63A]">
                 About Us
               </p>
               <h2 className="mt-3 text-3xl font-bold text-[#1a1a1a] dark:text-white sm:text-4xl lg:text-5xl">
-                Your Trusted Partner
+                A Family Business Built
                 <br />
-                Since 2003
+                on Trust Since 2003
               </h2>
               {aboutCompany?.body ? (
                 <div
@@ -403,7 +507,7 @@ export default async function HomePage() {
                   href="/contact"
                   className="inline-block rounded-full bg-[#8BB63A] px-8 py-4 font-semibold text-white shadow-lg shadow-[#8BB63A]/25 transition-all duration-300 hover:bg-[#7aa132] hover:shadow-xl"
                 >
-                  Contact Us
+                  Get Your Free Estimate
                 </Link>
               </div>
             </AnimatedSection>
@@ -415,7 +519,7 @@ export default async function HomePage() {
       <section className="bg-white dark:bg-[#0f0f0f] py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#8BB63A]">
               Our Work
             </p>
             <h2 className="mt-3 text-4xl font-bold text-[#1a1a1a] dark:text-white sm:text-5xl">
@@ -452,7 +556,7 @@ export default async function HomePage() {
                   >
                     <Image
                       src={item.url || item.image_url || ""}
-                      alt={item.alt_text || item.title || "Project image"}
+                      alt={item.alt_text || `${item.title || "Project"} by GDL Stone Snow in Bloomington MN`}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes={
@@ -488,11 +592,11 @@ export default async function HomePage() {
       <section className="bg-[#1a1a1a] py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="mb-16 text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#8BB63A]">
               Testimonials
             </p>
             <h2 className="mt-3 text-4xl font-bold text-white sm:text-5xl">
-              What Our Clients Say
+              Hear From Our Neighbors
             </h2>
           </AnimatedSection>
 
@@ -505,26 +609,27 @@ export default async function HomePage() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <AnimatedSection>
             <h2 className="text-4xl font-bold text-white sm:text-5xl">
-              Ready to Transform
+              Ready to Love Your
               <br />
-              Your Property?
+              Outdoor Space Again?
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-white/90">
-              Get a free estimate for your next landscaping or snow removal
-              project
+              Tell us about your project and get a free, no-obligation estimate
+              — most quotes delivered within 24 hours
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
                 href="tel:9528826182"
+                aria-label="Call GDL Stone Snow at (952) 882-6182"
                 className="rounded-full bg-white px-8 py-4 text-lg font-semibold text-[#1a1a1a] shadow-lg transition-all duration-300 hover:bg-gray-100 hover:shadow-xl"
               >
-                Call Now (952) 882-6182
+                Call Us Now: (952) 882-6182
               </a>
               <Link
                 href="/contact"
                 className="rounded-full border-2 border-white px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:bg-white hover:text-[#1a1a1a]"
               >
-                Get Free Estimate
+                Request Your Free Estimate
               </Link>
             </div>
           </AnimatedSection>
@@ -535,11 +640,11 @@ export default async function HomePage() {
       <section className="bg-[#f9fafb] dark:bg-[#111111] py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center">
-            <p className="text-sm font-bold uppercase tracking-widest text-[#8BB63A]">
+            <p className="text-sm font-semibold uppercase tracking-widest text-[#8BB63A]">
               Service Area
             </p>
             <h2 className="mt-3 text-2xl font-bold text-[#1a1a1a] dark:text-white sm:text-3xl">
-              Proudly Serving
+              Proudly Serving Our Neighbors
             </h2>
             <div className="mx-auto mt-8 flex max-w-4xl flex-wrap items-center justify-center gap-x-2 gap-y-3">
               {serviceAreas.map((area, index) => (
@@ -556,9 +661,42 @@ export default async function HomePage() {
               ))}
             </div>
             <p className="mt-6 text-gray-500 dark:text-gray-400">
-              And surrounding communities in the Twin Cities metro area
+              Plus surrounding communities across the Minneapolis-St. Paul metro
             </p>
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ========== AI-FRIENDLY BUSINESS SUMMARY ========== */}
+      <section className="bg-white dark:bg-[#0f0f0f] py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-2xl font-bold text-[#1a1a1a] dark:text-white sm:text-3xl">
+              About GDL Stone Snow LLC
+            </h2>
+            <div className="mt-2 h-1 w-16 rounded-full bg-[#8BB63A]" />
+            <div className="mt-6 space-y-4 text-base leading-relaxed text-gray-600 dark:text-gray-400">
+              <p>
+                GDL Stone Snow LLC is a family-owned landscaping, masonry, and snow removal company founded in 2003 by Fernando Floersch. Based at 1000 W. 94th St in Bloomington, Minnesota, the company has been serving residential and commercial properties across the Minneapolis-St. Paul metro area for over 23 years.
+              </p>
+              <p>
+                Our full range of services includes landscape design and installation, lawn care and maintenance, masonry and stone work, irrigation system installation and repair, snow removal, and ice management. We are available 24/7 for emergency snow and ice response.
+              </p>
+              <p>
+                GDL Stone Snow is licensed, fully insured, and accredited by the Better Business Bureau (BBB). We are also members of the National Federation of Independent Business (NFIB) and the Minnesota Nursery and Landscape Association (MNLA). We offer free estimates for all services and have completed over 500 projects for satisfied clients throughout the Twin Cities.
+              </p>
+              <p>
+                To get started, call our office at{" "}
+                <a href="tel:9528826182" className="font-medium text-[#8BB63A] hover:underline">(952) 882-6182</a>,
+                reach our sales team at{" "}
+                <a href="tel:6122366190" className="font-medium text-[#8BB63A] hover:underline">(612) 236-6190</a>,
+                or email us at{" "}
+                <a href="mailto:camoren000@gmail.com" className="font-medium text-[#8BB63A] hover:underline">camoren000@gmail.com</a>.
+                You can also{" "}
+                <Link href="/contact" className="font-medium text-[#8BB63A] hover:underline">request a free estimate online</Link>.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </>
