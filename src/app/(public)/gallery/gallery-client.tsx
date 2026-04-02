@@ -13,21 +13,22 @@ const FILTER_TABS = [
   { label: "Snow Removal", value: "Snow Removal" },
 ] as const;
 
-function isVideo(item: GalleryItem): boolean {
-  const url = (item.image_url || item.url || "").toLowerCase();
-  return url.includes("youtube.com") || url.includes("youtu.be") || url.includes("vimeo.com") || url.endsWith(".mp4") || url.endsWith(".webm");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getItemUrl(item: any): string {
+  return item.image_url || item.url || "";
 }
 
-function getVideoUrl(item: GalleryItem): string {
-  return item.image_url || item.url || "";
+function isVideo(item: GalleryItem): boolean {
+  const url = getItemUrl(item).toLowerCase();
+  return url.includes("youtube.com") || url.includes("youtu.be") || url.includes("vimeo.com") || url.endsWith(".mp4") || url.endsWith(".webm");
 }
 
 function getThumbnail(item: GalleryItem): string {
   if (item.thumbnail_url) return item.thumbnail_url;
-  const url = getVideoUrl(item);
+  const url = getItemUrl(item);
   const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg`;
-  return item.image_url || "";
+  return getItemUrl(item);
 }
 
 interface GalleryClientProps {
@@ -107,7 +108,7 @@ export default function GalleryClient({ items }: GalleryClientProps) {
                   className="group relative w-full overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8BB63A] focus-visible:ring-offset-2"
                 >
                   <Image
-                    src={isVideo(item) ? getThumbnail(item) : (item.thumbnail_url || item.image_url || item.url || "")}
+                    src={isVideo(item) ? getThumbnail(item) : (item.thumbnail_url || getItemUrl(item))}
                     alt={item.alt_text ?? `${item.title || "Project"} by GDL Stone Snow in Bloomington MN`}
                     width={600}
                     height={isVideo(item) ? 338 : 450}

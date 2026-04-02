@@ -82,7 +82,8 @@ export default function Lightbox({
 
   if (!item) return null;
 
-  const itemUrl = item.image_url || item.url || "";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const itemUrl = (item as any).image_url || item.url || "";
   const isVideoItem = isYouTubeUrl(itemUrl) || /vimeo\.com/.test(itemUrl) || /\.(mp4|webm)$/i.test(itemUrl);
   const isYT = isVideoItem && isYouTubeUrl(itemUrl);
   const isVideo = isVideoItem;
@@ -218,7 +219,7 @@ export default function Lightbox({
               </video>
             ) : (
               <Image
-                src={item.image_url || item.url || ""}
+                src={itemUrl}
                 alt={item.alt_text ?? item.title ?? "Gallery image"}
                 width={1200}
                 height={800}
