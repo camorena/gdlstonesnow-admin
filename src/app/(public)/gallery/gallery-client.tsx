@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import type { GalleryItem } from "@/types/database";
 import Lightbox from "./lightbox";
@@ -44,8 +45,8 @@ export default function GalleryClient({ items }: GalleryClientProps) {
 
   return (
     <>
-      {/* Filter tabs */}
-      <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-2 px-4 sm:px-6 lg:px-8">
+      {/* Premium Filter Bar */}
+      <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-3 px-4 sm:px-6 lg:px-8">
         {FILTER_TABS.map((tab) => (
           <button
             key={tab.value}
@@ -53,10 +54,10 @@ export default function GalleryClient({ items }: GalleryClientProps) {
               setActiveFilter(tab.value);
               setLightboxIndex(null);
             }}
-            className={`rounded-full px-6 py-2 text-sm font-medium transition-all ${
+            className={`rounded-full px-7 py-2.5 text-sm font-semibold transition-all duration-300 ${
               activeFilter === tab.value
-                ? "bg-[#8BB63A] text-white shadow"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-[#8BB63A] text-white shadow-lg shadow-[#8BB63A]/25"
+                : "border-2 border-gray-200 bg-white text-gray-600 hover:border-[#8BB63A]/50 hover:text-[#8BB63A]"
             }`}
           >
             {tab.label}
@@ -64,49 +65,103 @@ export default function GalleryClient({ items }: GalleryClientProps) {
         ))}
       </div>
 
-      {/* Grid */}
-      <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8">
-        {filtered.map((item, index) => (
-          <button
-            key={item.id}
-            onClick={() => openLightbox(index)}
-            className="group relative aspect-[4/3] overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8BB63A] focus-visible:ring-offset-2"
+      {/* Masonry Grid */}
+      <div className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            layout
+            className="columns-1 gap-4 sm:columns-2 lg:columns-3"
           >
-            <Image
-              src={item.thumbnail_url ?? item.url}
-              alt={item.alt_text ?? item.title ?? "Gallery image"}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
+            {filtered.map((item, index) => (
+              <motion.div
+                key={item.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3, delay: index * 0.03 }}
+                className="mb-4 break-inside-avoid"
+              >
+                <button
+                  onClick={() => openLightbox(index)}
+                  className="group relative w-full overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8BB63A] focus-visible:ring-offset-2"
+                >
+                  <Image
+                    src={item.thumbnail_url ?? item.url}
+                    alt={item.alt_text ?? item.title ?? "Gallery image"}
+                    width={600}
+                    height={item.type === "video" ? 338 : 450}
+                    className="w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
 
-            {/* Hover overlay */}
-            <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              {item.title && (
-                <span className="p-4 text-left text-sm font-medium text-white">
-                  {item.title}
-                </span>
-              )}
-            </div>
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1a1a1a]/70 opacity-0 transition-all duration-300 group-hover:opacity-100">
+                    {item.title && (
+                      <p className="mb-3 px-4 text-center text-lg font-semibold text-white">
+                        {item.title}
+                      </p>
+                    )}
+                    <span className="inline-flex items-center gap-2 rounded-full bg-[#8BB63A] px-5 py-2 text-sm font-semibold text-white shadow-lg">
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                        />
+                      </svg>
+                      View
+                    </span>
+                  </div>
 
-            {/* Video play button */}
-            {item.type === "video" && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black/60 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                  <svg className="ml-1 h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-            )}
-          </button>
-        ))}
+                  {/* Video play button */}
+                  {item.type === "video" && (
+                    <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1a1a1a]/60 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                        <svg
+                          className="ml-1 h-7 w-7 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </button>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {filtered.length === 0 && (
-        <p className="mt-16 text-center text-gray-400">
-          No items found in this category.
-        </p>
+        <div className="mt-20 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+            <svg
+              className="h-8 w-8 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <p className="text-lg text-gray-500">
+            No items found in this category.
+          </p>
+        </div>
       )}
 
       {/* Lightbox */}

@@ -1,9 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Promotion, PromotionItem } from "@/types/database";
+import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import AnimatedSection from "../components/animated-section";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Seasonal Promotions | GDL Stone Snow Bloomington MN",
+  description:
+    "Take advantage of seasonal offers on landscaping, stone work, and snow removal services from GDL Stone Snow LLC in Bloomington MN.",
+};
 
 type PromotionWithItems = Promotion & {
   promotion_items: PromotionItem[];
@@ -17,22 +25,29 @@ function getCurrentSeason(): string {
   return "winter";
 }
 
-const seasonStyles: Record<string, { badge: string; label: string }> = {
+const seasonStyles: Record<
+  string,
+  { badge: string; label: string; gradient: string }
+> = {
   spring: {
     badge: "bg-green-500 text-white",
     label: "Spring",
+    gradient: "from-green-600 via-[#8BB63A] to-emerald-500",
   },
   summer: {
     badge: "bg-amber-500 text-white",
     label: "Summer",
+    gradient: "from-amber-500 via-orange-400 to-yellow-400",
   },
   fall: {
     badge: "bg-orange-500 text-white",
     label: "Fall",
+    gradient: "from-orange-600 via-amber-500 to-orange-400",
   },
   winter: {
     badge: "bg-sky-500 text-white",
     label: "Winter",
+    gradient: "from-sky-600 via-blue-500 to-cyan-400",
   },
 };
 
@@ -55,55 +70,90 @@ export default async function PromotionsPage() {
   );
 
   const currentSeason = getCurrentSeason();
+  const heroGradient =
+    seasonStyles[currentSeason]?.gradient ?? seasonStyles.spring.gradient;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <div className="bg-[#1a1a1a] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-          <nav className="text-sm mb-4" aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2 text-gray-400">
+      {/* Hero with seasonal gradient */}
+      <section className={`relative overflow-hidden bg-gradient-to-r ${heroGradient}`}>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-white/30" />
+          <div className="absolute -bottom-20 right-1/4 h-96 w-96 rounded-full bg-white/20" />
+          <div className="absolute right-0 top-1/3 h-64 w-64 rounded-full bg-white/25" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
+          <nav className="mb-6" aria-label="Breadcrumb">
+            <ol className="flex items-center gap-2 text-sm text-white/70">
               <li>
-                <a href="/" className="hover:text-[#8BB63A] transition-colors">
+                <Link
+                  href="/"
+                  className="transition-colors hover:text-white"
+                >
                   Home
-                </a>
+                </Link>
               </li>
-              <li>/</li>
-              <li className="text-[#8BB63A]">Promotions</li>
+              <li className="select-none">/</li>
+              <li className="text-white">Promotions</li>
             </ol>
           </nav>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+          <h1 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
             Seasonal Promotions
           </h1>
-          <p className="mt-4 text-lg text-gray-300 max-w-2xl">
-            Take advantage of our seasonal offers on landscaping, stone work, and snow removal services.
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/90">
+            Take advantage of our seasonal offers on landscaping, stone work, and
+            snow removal services.
           </p>
+          <div className="mt-6 h-1 w-20 rounded-full bg-white/50" />
         </div>
-      </div>
+      </section>
 
       {/* Promotions Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         {sortedPromotions.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-500 text-lg">
+          <div className="py-20 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+              <svg
+                className="h-8 w-8 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <p className="text-lg text-gray-500">
               No active promotions at this time. Check back soon!
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {sortedPromotions.map((promo, index) => {
               const promoSeason = promo.season?.toLowerCase() || "";
               const isCurrentSeason = promoSeason === currentSeason;
-              const style = seasonStyles[promoSeason] || seasonStyles["spring"];
+              const style =
+                seasonStyles[promoSeason] || seasonStyles["spring"];
 
               return (
-                <AnimatedSection key={promo.id} delay={index * 100}>
+                <AnimatedSection key={promo.id} delay={index * 120}>
                   <div
-                    className={`bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col ${
+                    className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${
                       isCurrentSeason
-                        ? "ring-2 ring-[#8BB63A] shadow-[0_0_20px_rgba(139,182,58,0.3)]"
+                        ? "ring-2 ring-[#8BB63A] animate-[pulse-glow_3s_ease-in-out_infinite]"
                         : ""
                     }`}
+                    style={
+                      isCurrentSeason
+                        ? {
+                            animationName: "pulse-glow",
+                          }
+                        : undefined
+                    }
                   >
                     {/* Image */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden">
@@ -112,13 +162,13 @@ export default async function PromotionsPage() {
                           src={promo.image_url}
                           alt={promo.image_alt || promo.title}
                           fill
-                          className="object-cover"
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
                           <svg
-                            className="w-12 h-12 text-gray-400"
+                            className="h-12 w-12 text-gray-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -133,66 +183,60 @@ export default async function PromotionsPage() {
                         </div>
                       )}
 
-                      {/* Season Badge */}
+                      {/* Gradient overlay at bottom */}
+                      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
+
+                      {/* Season badge on gradient */}
                       {promoSeason && (
-                        <div className="absolute top-4 left-4">
+                        <div className="absolute bottom-4 left-4">
                           <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${style.badge}`}
+                            className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider ${style.badge} shadow-lg`}
                           >
                             {style.label}
                           </span>
                         </div>
                       )}
 
-                      {/* Current Season Indicator */}
+                      {/* Current season indicator */}
                       {isCurrentSeason && (
-                        <div className="absolute top-4 right-4">
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-[#8BB63A] text-white">
-                            <svg
-                              className="w-3 h-3"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Current Season
+                        <div className="absolute right-4 top-4">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#8BB63A] px-3.5 py-1.5 text-xs font-bold text-white shadow-lg">
+                            <span className="relative flex h-2 w-2">
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                              <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+                            </span>
+                            Active Now
                           </span>
                         </div>
                       )}
                     </div>
 
                     {/* Content */}
-                    <div className="p-6 flex-1 flex flex-col">
-                      <h3 className="text-xl font-bold text-[#1a1a1a] mb-4">
+                    <div className="flex flex-1 flex-col p-7">
+                      <h3 className="text-xl font-bold tracking-tight text-[#1a1a1a]">
                         {promo.title}
                       </h3>
 
                       {promo.promotion_items.length > 0 && (
-                        <ul className="space-y-3 flex-1">
+                        <ul className="mt-5 flex-1 space-y-3">
                           {promo.promotion_items.map((item) => (
-                            <li key={item.id} className="flex items-start gap-3">
-                              <svg
-                                className="w-5 h-5 text-[#8BB63A] mt-0.5 flex-shrink-0"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              <span className="text-gray-600 text-sm leading-relaxed">
+                            <li
+                              key={item.id}
+                              className="flex items-start gap-3"
+                            >
+                              <span className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-[#8BB63A]" />
+                              <span className="text-sm leading-relaxed text-gray-600">
                                 {item.title}
                               </span>
                             </li>
                           ))}
                         </ul>
                       )}
+                    </div>
+
+                    {/* Glass hover effect */}
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-white/5 to-white/10 backdrop-blur-[1px]" />
                     </div>
                   </div>
                 </AnimatedSection>
@@ -201,6 +245,18 @@ export default async function PromotionsPage() {
           </div>
         )}
       </div>
+
+      {/* Inline keyframes for pulse-glow animation */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes pulse-glow {
+              0%, 100% { box-shadow: 0 0 20px rgba(139,182,58,0.3); }
+              50% { box-shadow: 0 0 35px rgba(139,182,58,0.5); }
+            }
+          `,
+        }}
+      />
     </div>
   );
 }
