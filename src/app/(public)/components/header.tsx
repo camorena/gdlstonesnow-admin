@@ -109,7 +109,7 @@ export default function Header() {
           utilityVisible ? "top-[33px]" : "top-0"
         } ${
           scrolled
-            ? "bg-white/80 shadow-lg shadow-black/5 backdrop-blur-xl dark:bg-gray-900/80 dark:shadow-black/20"
+            ? "header-scrolled bg-white/80 shadow-lg shadow-black/5 backdrop-blur-xl dark:bg-gray-900/80 dark:shadow-black/20"
             : "bg-transparent"
         }`}
       >

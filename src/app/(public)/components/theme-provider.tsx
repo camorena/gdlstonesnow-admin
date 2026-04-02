@@ -86,17 +86,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener("change", handler);
   }, [theme, resolveAndApply]);
 
-  // Prevent rendering children until mounted to avoid hydration mismatch
-  // The flash-prevention script in layout handles the visual side
-  if (!mounted) {
-    return (
-      <ThemeContext.Provider
-        value={{ theme: "system", setTheme, resolvedTheme: "light" }}
-      >
-        {children}
-      </ThemeContext.Provider>
-    );
-  }
+  // Before mount, provide current values but the flash-prevention script
+  // in root layout already handles the visual side (applies dark class immediately)
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
