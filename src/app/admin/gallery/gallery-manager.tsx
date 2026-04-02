@@ -25,6 +25,12 @@ import {
 
 const CATEGORIES = ["landscaping", "masonry", "snow removal", "general"] as const;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isVideoItem(item: any): boolean {
+  const url = (item.image_url || item.url || "").toLowerCase();
+  return url.includes("youtube.com") || url.includes("youtu.be") || url.includes("vimeo.com") || url.endsWith(".mp4") || url.endsWith(".webm");
+}
+
 interface GalleryManagerProps {
   initialItems: GalleryItem[];
 }
@@ -326,7 +332,7 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-gray-400">
-                    {item.type === "video" ? (
+                    {isVideoItem(item) ? (
                       <Video className="h-10 w-10" />
                     ) : (
                       <ImagePlus className="h-10 w-10" />
@@ -336,10 +342,10 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
                 {/* Type badge */}
                 <span
                   className={`absolute top-2 right-2 rounded-full px-2 py-0.5 text-xs font-medium text-white ${
-                    item.type === "video" ? "bg-blue-600" : "bg-green-600"
+                    isVideoItem(item) ? "bg-blue-600" : "bg-green-600"
                   }`}
                 >
-                  {item.type}
+                  {isVideoItem(item) ? "video" : "image"}
                 </span>
               </div>
 
