@@ -626,15 +626,23 @@ export function PromotionsManager({
                         onClick={() => handleDelete(promotion.id)}
                       >
                         <Trash2 className="h-4 w-4" />
-                        Delete Promotion
+                        Delete
                       </Button>
-                      <Button
-                        onClick={() => handleSave(promotion.id)}
-                        disabled={saving[promotion.id]}
-                      >
-                        <Save className="h-4 w-4" />
-                        {saving[promotion.id] ? "Saving..." : "Save"}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => setExpandedId(null)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={() => handleSave(promotion.id)}
+                          disabled={saving[promotion.id]}
+                        >
+                          <Save className="h-4 w-4" />
+                          {saving[promotion.id] ? "Saving..." : "Save"}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}

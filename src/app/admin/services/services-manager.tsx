@@ -507,7 +507,13 @@ export function ServicesManager({ initialServices, initialServiceItems }: Props)
                         onClick={() => handleDelete(service.id)}
                       >
                         <Trash2 className="h-4 w-4" />
-                        Delete Service
+                        Delete
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setExpandedId(null)}
+                      >
+                        Cancel
                       </Button>
                       <Button
                         onClick={() => handleSave(service.id)}
