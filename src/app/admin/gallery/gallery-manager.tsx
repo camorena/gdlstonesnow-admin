@@ -171,20 +171,31 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
         await revalidatePublicPages("/gallery"); toast.success("Image added successfully.");
         closeModal();
       } else if (modal.kind === "add-video") {
-        if (!form.url.trim()) {
-          toast.error("Please enter a YouTube URL.");
+        let videoUrl = form.url.trim();
+        let thumbnail: string | null = null;
+
+        if (selectedFile) {
+          // Upload video file
+          setUploading(true);
+          videoUrl = await uploadFile(selectedFile);
+          setUploading(false);
+          thumbnail = null; // No auto-thumbnail for uploaded videos
+        } else if (videoUrl) {
+          // YouTube URL
+          thumbnail = extractYouTubeThumbnail(videoUrl);
+        } else {
+          toast.error("Please select a video file or enter a YouTube URL.");
           setSaving(false);
           return;
         }
 
-        const thumbnail = extractYouTubeThumbnail(form.url);
         const maxOrder = items.length > 0
           ? Math.max(...items.map((i) => i.sort_order))
           : -1;
 
         const newItem: GalleryItemInsert = {
           type: "video",
-          url: form.url,
+          url: videoUrl,
           thumbnail_url: thumbnail,
           title: form.title || null,
           alt_text: form.alt_text || null,
@@ -431,21 +442,36 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
                 </div>
               )}
 
-              {/* YouTube URL for videos */}
+              {/* Video options */}
               {!isImage && (
-                <div>
-                  <Label htmlFor="url" className={labelClass}>
-                    YouTube URL
-                  </Label>
-                  <Input
-                    id="url"
-                    name="url"
-                    type="url"
-                    value={form.url}
-                    onChange={handleChange}
-                    placeholder="https://www.youtube.com/watch?v=..."
-                    required={!isEditing}
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="video-file" className={labelClass}>
+                      Upload Video File
+                    </Label>
+                    <Input
+                      id="video-file"
+                      type="file"
+                      accept="video/mp4,video/webm,video/quicktime"
+                      onChange={handleFileSelect}
+                      className="mt-1"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">MP4, WebM, or MOV (max 500MB)</p>
+                  </div>
+                  <div className="text-center text-sm text-gray-400 font-medium">— OR —</div>
+                  <div>
+                    <Label htmlFor="url" className={labelClass}>
+                      YouTube URL
+                    </Label>
+                    <Input
+                      id="url"
+                      name="url"
+                      type="url"
+                      value={form.url}
+                      onChange={handleChange}
+                      placeholder="https://www.youtube.com/watch?v=..."
+                    />
+                  </div>
                 </div>
               )}
 
