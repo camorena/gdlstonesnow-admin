@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
 import { ThemeProvider } from "./(public)/components/theme-provider";
 
-const inter = Inter({
+const heading = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  weight: ["500", "600", "700", "800"],
+  display: "swap",
+});
+
+const body = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -45,7 +54,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${heading.variable} ${body.variable} font-sans antialiased`}>
         <script dangerouslySetInnerHTML={{ __html: `
           try {
             const theme = localStorage.getItem('gdl-theme');
